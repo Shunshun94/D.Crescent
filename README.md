@@ -1,37 +1,50 @@
-## Welcome to GitHub Pages
+# HiyokoCross
 
-You can use the [editor on GitHub](https://github.com/Shunshun94/HiyokoCross/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+## どんなツール
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+オンセにおけるダブルクロス the 3rd Edition ([公式ページ](http://www.fear.co.jp/dbx3rd/)) の進行をスムーズにするツール。
+*これから作る。まだ使えるわけではない。*
 
-### Markdown
+## ライセンス
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### このアプリのライセンス
 
-```markdown
-Syntax highlighted code block
+[MIT　ライセンス](./LICENSE) になる予定。
 
-# Header 1
-## Header 2
-### Header 3
+### 使った外部ライブラリのライセンス
 
-- Bulleted
-- List
+作ったら書く。
 
-1. Numbered
-2. List
+## どうやって使うの
 
-**Bold** and _Italic_ and `Code` text
+以下の2つを事前準備する。
 
-[Link](url) and ![Image](src)
-```
+### キャラクターシート
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+以下のどちらかでキャラクターシートを作る。
 
-### Jekyll Themes
+* [キャラクター保管庫](http://charasheet.vampire-blood.net/dx3_pc_making.html)
+* [キャラクターシート](https://character-sheets.appspot.com/dx3/)
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Shunshun94/HiyokoCross/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+本アプリはどちらで作ったキャラクターシートにも対応する予定である。
 
-### Support or Contact
+### オンセ会場
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+以下のオンセプラットフォームに対応させる予定。
+どちらかで部屋を用意すること。ただし、Discord の場合、部屋とは別に bot を作成する必要がある。
+
+* どどんとふ
+* Discord
+
+Discord で Bot を用意するには以下の手順を踏む必要がある。
+以下の手順 4 で得た Token が必要となる。この Token は他の人には原則共有しないこと。
+その Bot を使うためのパスワードのようなものだからである。
+
+1. [開発者ページ](https://discordapp.com/developers/applications/me) にアクセスし、New APP をクリックする
+2. 最低限 APP NAME と APP ICON を入力し、 Create App をクリックする
+3. Create Bot User というボタンをクリックし、このダイスボット用のユーザを作成する
+4. Bot の Username の下に "Token:click to reveal" というのがあるのでクリックし、出てくるランダムな文字列をメモする
+5. 画面上部の APP DETAILS のところに書かれた Client ID の数字をメモする
+6. 次の URL にアクセスする `https://discordapp.com/oauth2/authorize?client_id=[Client Id の数字]&scope=bot&permissions=0`
+
+
