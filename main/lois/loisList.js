@@ -12,10 +12,43 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			{title:'Dロイス', type:'check'},
 			{title:'感情(P)', type:'text'},
 			{title:'感情(N)', type:'text'},
-			{title:'Sロイス', type:'check'},
+			{title:'Sロイス', type:'check', inputTrigger: 'handleSLois'},
 			{title:'タイタス', type:'check'},
 			{title:'昇華', type:'check'}
 		]);
+		this.bindEvents();
+	}
+	
+	handleSLois(val, line) {
+		const revertSLois = () => {
+			console.log(line.find('.display-loises-member-4 > input'));
+			line.find('.display-loises-member-4 > input').prop('checked', false);
+		}
+		
+		const hasSLois = Boolean($('.display-loises-member-4 > input').filter((i, $elem) => {
+			return $($elem).prop('checked');
+		}).length > 1);
+		const lineInfo = this.getLine(line);			
+
+		if(lineInfo[1]) {
+			alert('DロイスをSロイスに指定することはできません')
+			revertSLois();
+			return;
+		}
+		if(lineInfo[5]) {
+			alert('既にタイタスになっています')
+			revertSLois();
+			return;
+		}
+		if(hasSLois) {
+			alert('Sロイスに指定できるロイスは1つまでです');
+			revertSLois();
+			return;
+		}
+		console.log(`${lineInfo[0]} を S ロイスに指定`); 
+			
+		
+		
 	}
 	
 	setLine(line, opt_$tr) {
@@ -62,7 +95,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			}
 			
 			if(col.autocomplete) {
-				$input.attr({'autocomplete': 'on', 'list': col.autocomplete.attr('id')})
+				$input.attr({'autocomplete': 'on', 'list': col.autocomplete.attr('id')});
 			}
 			
 			if($input) {
@@ -71,5 +104,17 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			$member.append($col);
 		});
 		this.getElementsByClass('util').before($member);
+	}
+	
+	bindEvents () {
+		this.$html.change((e) => {
+			const targetElemParent = $(e.target).parent();
+			const targetName = $(e.target).parent().parent().find('.display-loises-member-0 > input').val();
+			if(targetElemParent.hasClass('display-loises-member-4')) {
+//				console.log(targetName + 'を S ロイスに指定')
+			}
+		});
+		
+		
 	}
 };
