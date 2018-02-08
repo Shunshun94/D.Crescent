@@ -12,23 +12,129 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			{title:'Dロイス', type:'check'},
 			{title:'感情(P)', type:'text'},
 			{title:'感情(N)', type:'text'},
-			{title:'Sロイス', type:'check', inputTrigger: 'handleSLois'},
-			{title:'タイタス', type:'check'},
-			{title:'昇華', type:'check'}
+			{title:'Sロイス', type:'check', inputTrigger: this.handleSLois.bind(this)},
+			{title:'タイタス', type:'check', inputTrigger: this.handleTitus.bind(this)},
+			{title:'昇華', type:'check', inputTrigger: this.handleSublimation.bind(this)}
 		]);
 		this.bindEvents();
 	}
 	
+	sendMessage(msg) {
+		this.fireEvent({
+			type: `${this.id}-sendMessage`,
+			message: msg
+		});
+	}
+	
+	appendNewLois() {
+		const addResult = this.addMember();
+		const newLoisName = window.prompt("誰にロイスを取得しますか?", "");
+		if(newLoisName) {
+			this.setLine([newLoisName, false, '', '', false, false, false], addResult);
+			this.sendMessage(`${newLoisName}に対してロイスを取得しました`);
+		} else {
+			this.getElementsByClass('member:last').remove();
+		}
+	}
+	
+	bindSharedEvent() {
+		this.getElementById('add').click(this.appendNewLois.bind(this));
+		this.getElementById('remove').remove();
+		
+		this.$html.change((e) => {
+			var $tr = $(e.target);
+			var num = Number($tr.attr('name'));
+			var inputValue = $tr.val();
+			
+			while(! $tr.hasClass(this.memberClass)) {
+				$tr = $tr.parent();
+			}
+			
+			if(this.cols[num].inputTrigger) {
+				this.cols[num].inputTrigger(inputValue, $tr);
+			}
+		});
+		
+		this.getElementById('body').sortable();
+		
+		
+	}
+	
+	handleSublimation(val, line) {
+		const lineInfo = this.getLine(line);
+		if(! line.find('.display-loises-member-6 > input').prop('checked')) {
+			if(window.confirm('昇華されたタイタスを戻すことは原則としてできません。\n本当に昇華されたタイタスを未昇華に戻しますか')) {
+				this.sendMessage(`[特例的処理] ${lineInfo[0]} への昇華されたタイタスを未昇華の状態に戻しました。`); 
+			} else {
+				line.find('.display-loises-member-6 > input').prop('checked', true);
+			}
+			return;
+		}
+		if(lineInfo[4]) {
+			this.sendMessage(`${lineInfo[0]} へのタイタス (Sロイス) を昇華しました。`); 
+		} else {
+			this.sendMessage(`${lineInfo[0]} へのタイタスを昇華しました。`); 
+		}
+	}
+	
+	handleTitus(val, line) {
+		const lineInfo = this.getLine(line);
+		const revertTitus = () => {
+			line.find('.display-loises-member-5 > input').prop('checked', false);
+		}
+		if(! line.find('.display-loises-member-5 > input').prop('checked')) {
+			if(lineInfo[6]) {
+				alert('ロイスに戻そうにもすでに昇華済です。\n何らかの特例的処理で戻す場合は先に昇華を解除してください');
+				line.find('.display-loises-member-5 > input').prop('checked', true);
+				return;
+			}
+			if(window.confirm('タイタスをロイスに戻すことは原則としてできません。\n本当にタイタスをロイスにもどしますか?')) {
+				this.sendMessage(`[特例的処理] ${lineInfo[0]} へのタイタスをロイスに戻しました。`); 
+			} else {
+				line.find('.display-loises-member-5 > input').prop('checked', true);
+			}
+			return;
+		}
+		
+		if(lineInfo[1]) {
+			alert('Dロイスをタイタスにすることはできません');
+			revertTitus();
+		}
+		
+		if(lineInfo[4]) {
+			if(window.confirm('Sロイスをタイタスにした場合、\n昇華する際により強力な効果を発揮しますが、もらえる経験点が減少します。\n本当にタイタスにしてよいですか?')) {
+				this.sendMessage(`Sロイス：${lineInfo[0]} をタイタスにしました。`); 
+			} else {
+				revertTitus();
+			}
+			return;
+		}
+		this.sendMessage(`ロイス：${lineInfo[0]} をタイタスにしました。`); 
+	}
+	
 	handleSLois(val, line) {
+		const lineInfo = this.getLine(line);
+		if(! line.find('.display-loises-member-4 > input').prop('checked')) {
+			if(lineInfo[5]) {
+				alert('普通のロイスに戻そうにも既にタイタスになっています。\n何らかの特例処理で戻す場合は先にタイタスから戻してください')
+				line.find('.display-loises-member-4 > input').prop('checked', true);
+				return;
+			}
+			if(window.confirm('Sロイスを普通のロイスに戻すことは原則としてできません。\n本当にSロイスを普通のロイスにもどしますか?')) {
+				this.sendMessage(`[特例的処理] ロイス ${lineInfo[0]} を S ロイスから通常のロイスに戻しました。`); 
+			} else {
+				line.find('.display-loises-member-4 > input').prop('checked', true);
+			}
+			return;
+		}
+		
 		const revertSLois = () => {
-			console.log(line.find('.display-loises-member-4 > input'));
 			line.find('.display-loises-member-4 > input').prop('checked', false);
 		}
 		
 		const hasSLois = Boolean($('.display-loises-member-4 > input').filter((i, $elem) => {
 			return $($elem).prop('checked');
 		}).length > 1);
-		const lineInfo = this.getLine(line);			
 
 		if(lineInfo[1]) {
 			alert('DロイスをSロイスに指定することはできません')
@@ -45,10 +151,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			revertSLois();
 			return;
 		}
-		console.log(`${lineInfo[0]} を S ロイスに指定`); 
-			
-		
-		
+		this.sendMessage(`ロイス：${lineInfo[0]} を S ロイスに指定しました。`); 
 	}
 	
 	setLine(line, opt_$tr) {
@@ -72,7 +175,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 	addMember() {
 		if($(`.${this.memberClass}`).length === 7) {
 			alert('ロイスは7つまでしか持てません');
-			return;
+			return false;
 		}
 		
 		var $member = $('<tr></tr>')
@@ -104,6 +207,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			$member.append($col);
 		});
 		this.getElementsByClass('util').before($member);
+		return this.getElementsByClass('member:last');
 	}
 	
 	bindEvents () {

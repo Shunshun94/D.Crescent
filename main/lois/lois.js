@@ -22,6 +22,10 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 	}
 	
 	eventBind() {
+		this.$html.on(`${this.id}-loises-sendMessage`, (e) => {
+			console.log(`CHAT INFO: ${e.message}`);
+		});
+		
 		this.$html.on('getStorage', (e) => {
 			const list = this.sheet.lois.map((lois) => {
 				return [lois.name, (lois.type === 'Dロイス'), lois.Pfeel, lois.Nfeel, lois.isSLois, lois.titus, lois.used]
