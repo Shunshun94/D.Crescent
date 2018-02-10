@@ -63,13 +63,20 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 	handleSublimation(val, line) {
 		const lineInfo = this.getLine(line);
 		if(! line.find('.display-loises-member-6 > input').prop('checked')) {
-			if(window.confirm('昇華されたタイタスを戻すことは原則としてできません。\n本当に昇華されたタイタスを未昇華に戻しますか')) {
+			if(window.confirm('昇華されたタイタスを戻すことは原則としてできません。\n本当に昇華されたタイタスを未昇華に戻しますか?')) {
 				this.sendMessage(`[特例的処理] ${lineInfo[0]} への昇華されたタイタスを未昇華の状態に戻しました。`); 
 			} else {
 				line.find('.display-loises-member-6 > input').prop('checked', true);
 			}
 			return;
 		}
+		
+		if(! lineInfo[5]) {
+			alert('ロイスのまま昇華することはできません。昇華する前にタイタスにしてください');
+			line.find('.display-loises-member-6 > input').prop('checked', false);
+			return;
+		}
+		
 		if(lineInfo[4]) {
 			this.sendMessage(`${lineInfo[0]} へのタイタス (Sロイス) を昇華しました。`); 
 		} else {
