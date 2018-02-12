@@ -10,6 +10,8 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 			throw 'io.github.shunshun94.HiyokoCross.Lois Requires TWO arguments.' + 
 			'1st, base element. 2nd, character sheet data.';
 		}
+		this.$html.empty();
+		this.$html.append(`<button id="${this.id}-shareLoises">ロイスの状態を共有する</button>`);
 		this.eventBind();
 		this.buildComponents();
 	}
@@ -45,13 +47,61 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 	}
 
 	buildComponents() {
-		this.$html.empty();
 		this.$html.append(`<table border="1" id="${this.id}-loises">` + '</table>');
 		const $loises = this.getElementById('loises');
 		this.table = new io.github.shunshun94.HiyokoCross.LoisList($loises);
 	}
 	
 	eventBind() {
+		this.getElementById('shareLoises').click((e) => {
+			const loises = this.getData().lois;
+			const dLois = loises.filter((lois) => {
+				return lois.type === 'Dロイス';
+			}).map((lois) => {return lois.name});
+			const titus = loises.filter((lois) => {
+				return lois.titus;
+			}).map((lois) => {
+				if(lois.used) {
+					return lois.name + ' (昇華済)';
+				} else {
+					return lois.name;
+				}
+			});
+			const normalLois = loises.filter((lois) => {
+				return (! Boolean(lois.titus)) && lois.type !== 'Dロイス'
+			}).map((lois) => {  
+				if(lois.isSLois) {
+					return lois.name + ' (Sロイス)';
+				} else {
+					return lois.name;
+				}
+			});
+			
+			var message = '';
+			if(dLois.length) {
+				message += 'Dロイス\n' + dLois.join('\n') + '\n\n';
+			}
+			if(normalLois.length) {
+				message += `ロイス\n` + normalLois.join('\n') + '\n\n';
+			}
+			if(titus.length) {
+				message += 'タイタス\n' + titus.join('\n') + '\n\n';
+			}
+			if(7 - loises.length) {
+				message += `空スロット ${7 - loises.length}つ`
+			}
+			
+			
+			this.fireEvent({
+				type: 'tofRoomRequest',
+				method: 'sendChat',
+				args: [{
+					name: this.sheet.name,
+					message: message
+				}]
+			});
+		});
+		
 		this.$html.on(io.github.shunshun94.HiyokoCross.LoisList.EVENTS.SEND_MESSAGE, (e) => {
 			e.name = this.sheet.name;
 			this.fireEvent({
