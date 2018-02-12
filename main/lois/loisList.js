@@ -9,29 +9,35 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 		this.id = this.$html.attr('id');
 		this.renderTable([
 			{title:'名前', type:'text'},
-			{title:'Dロイス', type:'check'},
+			{title:'Dロイス', type:'check', inputTrigger: this.handleDLois.bind(this)},
 			{title:'感情(P)', type:'text'},
 			{title:'感情(N)', type:'text'},
 			{title:'Sロイス', type:'check', inputTrigger: this.handleSLois.bind(this)},
 			{title:'タイタス', type:'check', inputTrigger: this.handleTitus.bind(this)},
 			{title:'昇華', type:'check', inputTrigger: this.handleSublimation.bind(this)}
 		]);
-		this.bindEvents();
 	}
 	
 	sendMessage(msg) {
 		this.fireEvent({
-			type: `${this.id}-sendMessage`,
+			type: io.github.shunshun94.HiyokoCross.LoisList.EVENTS.SEND_MESSAGE,
 			message: msg
 		});
 	}
 	
+	updateRequest() {
+		this.fireEvent({
+			type: io.github.shunshun94.HiyokoCross.LoisList.EVENTS.UPDATE_REQUEST
+		});
+	}
+
 	appendNewLois() {
 		const addResult = this.addMember();
 		const newLoisName = window.prompt("誰にロイスを取得しますか?", "");
 		if(newLoisName) {
 			this.setLine([newLoisName, false, '', '', false, false, false], addResult);
 			this.sendMessage(`${newLoisName}に対してロイスを取得しました`);
+			this.updateRequest();
 		} else {
 			this.getElementsByClass('member:last').remove();
 		}
@@ -56,10 +62,12 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 		});
 		
 		this.getElementById('body').sortable();
-		
-		
 	}
-	
+
+	handleDLois(val, line) {
+		this.updateRequest();
+	}
+
 	handleSublimation(val, line) {
 		const lineInfo = this.getLine(line);
 		if(! line.find('.display-loises-member-6 > input').prop('checked')) {
@@ -83,7 +91,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			this.sendMessage(`${lineInfo[0]} へのタイタスを昇華しました。`); 
 		}
 	}
-	
+
 	handleTitus(val, line) {
 		const lineInfo = this.getLine(line);
 		const revertTitus = () => {
@@ -97,6 +105,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			}
 			if(window.confirm('タイタスをロイスに戻すことは原則としてできません。\n本当にタイタスをロイスにもどしますか?')) {
 				this.sendMessage(`[特例的処理] ${lineInfo[0]} へのタイタスをロイスに戻しました。`); 
+				this.updateRequest();
 			} else {
 				line.find('.display-loises-member-5 > input').prop('checked', true);
 			}
@@ -110,15 +119,17 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 		
 		if(lineInfo[4]) {
 			if(window.confirm('Sロイスをタイタスにした場合、\n昇華する際により強力な効果を発揮しますが、もらえる経験点が減少します。\n本当にタイタスにしてよいですか?')) {
-				this.sendMessage(`Sロイス：${lineInfo[0]} をタイタスにしました。`); 
+				this.sendMessage(`Sロイス：${lineInfo[0]} をタイタスにしました。`);
+				this.updateRequest();
 			} else {
 				revertTitus();
 			}
 			return;
 		}
 		this.sendMessage(`ロイス：${lineInfo[0]} をタイタスにしました。`); 
+		this.updateRequest();
 	}
-	
+
 	handleSLois(val, line) {
 		const lineInfo = this.getLine(line);
 		if(! line.find('.display-loises-member-4 > input').prop('checked')) {
@@ -128,7 +139,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 				return;
 			}
 			if(window.confirm('Sロイスを普通のロイスに戻すことは原則としてできません。\n本当にSロイスを普通のロイスにもどしますか?')) {
-				this.sendMessage(`[特例的処理] ロイス ${lineInfo[0]} を S ロイスから通常のロイスに戻しました。`); 
+				this.sendMessage(`[特例的処理] ロイス ${lineInfo[0]} を S ロイスから通常のロイスに戻しました。`);
 			} else {
 				line.find('.display-loises-member-4 > input').prop('checked', true);
 			}
@@ -158,7 +169,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			revertSLois();
 			return;
 		}
-		this.sendMessage(`ロイス：${lineInfo[0]} を S ロイスに指定しました。`); 
+		this.sendMessage(`ロイス：${lineInfo[0]} を S ロイスに指定しました。`);
 	}
 	
 	setLine(line, opt_$tr) {
@@ -216,16 +227,9 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 		this.getElementsByClass('util').before($member);
 		return this.getElementsByClass('member:last');
 	}
-	
-	bindEvents () {
-		this.$html.change((e) => {
-			const targetElemParent = $(e.target).parent();
-			const targetName = $(e.target).parent().parent().find('.display-loises-member-0 > input').val();
-			if(targetElemParent.hasClass('display-loises-member-4')) {
-//				console.log(targetName + 'を S ロイスに指定')
-			}
-		});
-		
-		
-	}
 };
+
+io.github.shunshun94.HiyokoCross.LoisList.EVENTS = {
+		SEND_MESSAGE: 'io-github-shunshun94-HiyokoCross-LoisList-EVENTS-SEND_MESSAGE',
+		UPDATE_REQUEST: 'io-github-shunshun94-HiyokoCross-LoisList-EVENTS-UPDATE_REQUEST'
+}

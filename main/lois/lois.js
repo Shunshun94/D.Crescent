@@ -14,6 +14,36 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 		this.buildComponents();
 	}
 	
+	updateInitiativeTable() {
+		const data = this.getData();
+		this.fireEvent({
+			type: 'tofRoomRequest',
+			method: 'updateCharacter',
+			args: [{
+				targetName: this.sheet.name,
+				'ロイス': data.lois.filter((lois) => {
+					return !(lois.titus || lois.type === 'Dロイス');
+				}).length
+			}]
+		});
+	}
+
+	getData() {
+		var result = {};
+		result.lois = this.table.getTableValue().map((lois) => {
+			return {
+				name: lois[0],
+				type: lois[1] ? 'Dロイス' : '',
+				Pfeel: lois[2],
+				Nfeel: lois[3],
+				isSLois: lois[4],
+				titus: lois[5],
+				used: lois[6]
+			}
+		});
+		return result;
+	}
+
 	buildComponents() {
 		this.$html.empty();
 		this.$html.append(`<table border="1" id="${this.id}-loises">` + '</table>');
@@ -22,8 +52,17 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 	}
 	
 	eventBind() {
-		this.$html.on(`${this.id}-loises-sendMessage`, (e) => {
-			console.log(`CHAT INFO: ${e.message}`);
+		this.$html.on(io.github.shunshun94.HiyokoCross.LoisList.EVENTS.SEND_MESSAGE, (e) => {
+			e.name = this.sheet.name;
+			this.fireEvent({
+				type: 'tofRoomRequest',
+				method: 'sendChat',
+				args: [e]
+			});
+		});
+
+		this.$html.on(io.github.shunshun94.HiyokoCross.LoisList.EVENTS.UPDATE_REQUEST, (e) => {
+			this.updateInitiativeTable(e);
 		});
 		
 		this.$html.on('getStorage', (e) => {
