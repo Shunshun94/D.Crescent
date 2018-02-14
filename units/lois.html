@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ロイス管理機能動作確認</title>
+</head>
+<body>
+<p>ロイス・タイタスの管理機能がどのように動くのかを示したものです。<br/>オンセプラットフォームにはつないだふりをしているだけです。</p>
+<hr/>
+<p id="select">ここに<a href="http://charasheet.vampire-blood.net/list_dx3">キャラクター保管所</a>や<a href="http://character-sheets.appspot.com/dx3/">キャラクターシート倉庫</a>にある<br/>キャラクターシートの URL を入力したのち、<br/>出力をクリックします　→<input list="list" id="input" type="text" /> <input id="exec" type="button" value="出力" /></p>
+<datalist id="list"></datalist>
+
+<div id="display"></div>
+<hr/>
+<div id="log"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/util/v2/utils.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/vampireblood/client.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/vampireblood/dx3.js"></script>
+<script src="https://shunshun94.github.io/shared/other/io/github/shunshun94/trpg/clientSpec.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/dummy/client.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/characterSheetsMasashige/client.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/characterSheetsMasashige/dx3.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/clientSelector.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/components/v1/ApplicationBase.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/components/v1/TableBase.js"></script>
+<script src="../main/lois/loisList.js"></script>
+<script src="../main/lois/lois.js"></script>
+<script>
+com.hiyoko.util.forEachMap(JSON.parse(localStorage.getItem('com-hiyoko-sample-dx3sheetparse-index') || '{}'), (v, k) => {
+	$('#list').append(`<option value="${k}">${v}</option>`);
+});
+const client = new io.github.shunshun94.trpg.dummy.Room($('#log'));
+
+$('#display').on('tofRoomRequest', function(event) {
+	client[event.method].apply(client, event.args).done(event.resolve).fail(event.reject);
+});
+
+$('#exec').click((e) => {
+	io.github.shunshun94.trpg.selectClient($('input').val()).DX3.getSheet($('input').val()).done((instance) => {
+		new io.github.shunshun94.HiyokoCross.Lois($('#display'), instance);
+		client.addCharacter({
+			name: instance.name,
+			HP: instance.subStatus.HP,
+			'侵蝕率': instance.subStatus.erotion,
+			'財産ポイント': instance.subStatus.property,
+			'ロイス': instance.lois.filter((lois) => {
+				return !(lois.titus || lois.type === 'Dロイス');
+			}).length
+		});
+		com.hiyoko.util.updateLocalStorage('com-hiyoko-sample-dx3sheetparse-index', $('input').val(), instance.name);
+		$('#select').hide();
+	});
+});
+</script>
+
+</body>
+</html>
