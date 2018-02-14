@@ -11,6 +11,7 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 			'1st, base element. 2nd, character sheet data.';
 		}
 		this.$html.empty();
+		this.$html.append('<h2>ロイス/タイタス および メモリーの管理</h2>')
 		this.$html.append(`<button id="${this.id}-shareLoises">ロイスの状態を共有する</button>`);
 		this.eventBind();
 		this.buildComponents();
@@ -43,13 +44,26 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 				used: lois[6]
 			}
 		});
+		result.memory = this.sheet.memory.filter((memory) => {return memory.name;});
 		return result;
 	}
 
 	buildComponents() {
+		this.$html.append('<h3>ロイス / タイタス</h3>');
 		this.$html.append(`<table border="1" id="${this.id}-loises">` + '</table>');
 		const $loises = this.getElementById('loises');
 		this.table = new io.github.shunshun94.HiyokoCross.LoisList($loises);
+		const memories = this.sheet.memory.filter((memory) => {return memory.name;});
+		if(memories.length) {
+			this.$html.append('<h3>メモリー</h3>');
+			var $memoryBase = $(`<ul id="${this.id}-memories"></ul>`);
+			memories.forEach((memory) => {
+				var $li = $(`<li class="${this.id}-memories-memory"></li>`);
+				$li.text(`${memory.name} - ${memory.txt}`);
+				$memoryBase.append($li);
+			});
+			this.$html.append($memoryBase);
+		}
 	}
 	
 	eventBind() {
