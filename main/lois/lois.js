@@ -44,7 +44,7 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 				used: lois[6]
 			}
 		});
-		result.memory = this.sheet.memory.filter((memory) => {return memory.name;});
+		result.memory = (this.sheet.memory || []).filter((memory) => {return memory.name;});
 		return result;
 	}
 
@@ -53,7 +53,7 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 		this.$html.append(`<table border="1" id="${this.id}-loises">` + '</table>');
 		const $loises = this.getElementById('loises');
 		this.table = new io.github.shunshun94.HiyokoCross.LoisList($loises);
-		const memories = this.sheet.memory.filter((memory) => {return memory.name;});
+		const memories = (this.sheet.memory || []).filter((memory) => {return memory.name;});
 		if(memories.length) {
 			this.$html.append('<h3>メモリー</h3>');
 			var $memoryBase = $(`<ul id="${this.id}-memories"></ul>`);

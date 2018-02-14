@@ -5,6 +5,14 @@
 オンセにおけるダブルクロス the 3rd Edition ([公式ページ](http://www.fear.co.jp/dbx3rd/)) の進行をスムーズにするツール。
 *これから作る。まだ使えるわけではない。*
 
+### プレ公開
+
+[ロイス/タイタス および メモリーの管理](./units/lois.html)
+
+### 更新履歴
+
+[更新履歴](./docs/version.md)
+
 ## ライセンス
 
 ### このアプリのライセンス
@@ -13,7 +21,21 @@
 
 ### 使った外部ライブラリのライセンス
 
-作ったら書く。
+#### jQuery v.3.1.0
+
+Copyright (c) 2005, 2016 jQuery Foundation, Inc.
+
+MIT ライセンスです。
+
+ライセンス情報:  https://jquery.org/license/
+
+#### jQuery UI v.1.12.1
+
+Copyright (c) jQuery Foundation and other contributors
+
+MIT ライセンスです。
+
+ライセンス情報:  https://jquery.org/license/
 
 ## どうやって使うの
 
