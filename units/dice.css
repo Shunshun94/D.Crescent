@@ -1,0 +1,37 @@
+#display {
+	magrin: 32px;
+}
+
+.display-check {
+	border: 3px inset #DDDDDD;
+	background-color: #EEEEEE;
+}
+
+.display-check-header {
+	margin: 4px;
+}
+
+.display-check-skill {
+	margin-left: 16px;
+	padding: 4px;
+}
+
+.display-check-skill:nth-child(odd) {
+	background-color: #FFEEEE;
+}
+
+.display-check-skill:nth-child(even) {
+	background-color: #EEEEFF;
+}
+
+.display-check-combo-combo-spec,
+.display-check-combo-combo-note,
+.display-check-effect-effect-spec,
+.display-check-effect-effect-note {
+	margin-left: 16px;
+}
+
+.display-check-combo-combo-spec,
+.display-check-effect-effect-spec {
+	border-bottom: 2px #DDDDDD solid;
+}

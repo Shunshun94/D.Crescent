@@ -6,6 +6,7 @@ io.github.shunshun94.HiyokoCross.ComboCheck = class extends com.hiyoko.component
 	constructor($html, data) {
 		super($html);
 		this.combos = data;
+		this.clazz = this.$html.attr('class');
 		this.buildComponents();
 	}
 	buildComponents () {
