@@ -22,7 +22,6 @@ io.github.shunshun94.HiyokoCross.EffectCheck = class extends com.hiyoko.componen
 	}
 
 	resetEffectChecks () {
-		console.log(`${this.id}-effect-check`)
 		$(`.${this.id}-effect-check`).prop('checked', false);
 	}
 
@@ -58,7 +57,8 @@ io.github.shunshun94.HiyokoCross.EffectCheck = class extends com.hiyoko.componen
 
 	buildComponents () {
 		this.$html.append(
-				`<h3 class="${this.clazz}-header"><span class="${this.id}-name ${this.clazz}-name">エフェクト</span></h3>`);
+				`<h3 class="${this.clazz}-header"><span class="${this.id}-name ${this.clazz}-name">エフェクト</span>` +
+				`<button id="${this.id}-toggle">開閉</button></h3>`);
 		this.$html.append(this.effects.map((skill, i) => {return this.generateEffectDom(skill, i)}));
 		this.$html.append(`<button id="${this.id}-exec">エフェクト行使 (判定は行われず侵蝕率のみ上昇します)</button>`);
 	}
@@ -73,13 +73,14 @@ io.github.shunshun94.HiyokoCross.EffectCheck = class extends com.hiyoko.componen
 		if(/[1-9]/.exec(totalCost)) {
 			this.sendCost(totalCost);			
 		} else {
-			console.log(`侵蝕率上昇なし - ${totalCost}`)
+			console.log(`侵蝕率上昇なし - ${totalCost}`);
 		}
 		this.resetEffectChecks();
 	}
 
 	bindEvents() {
 		this.getElementById('exec').click((e) => {this.useEffects()});
+		this.getElementById('toggle').click((e) => {this.getElementsByClass('effect').toggle(300);});
 	}
 
 	generateEffectDom (skill, num) {

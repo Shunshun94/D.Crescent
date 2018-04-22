@@ -1,37 +1,37 @@
-#display {
+#display-checklist {
 	magrin: 32px;
 }
 
-.display-check {
+.display-checklist-check {
 	border: 3px inset #DDDDDD;
 	background-color: #EEEEEE;
 }
 
-.display-check-header {
+.display-checklist-check-header {
 	margin: 4px;
 }
 
-.display-check-skill {
+.display-checklist-check-skill {
 	margin-left: 16px;
 	padding: 4px;
 }
 
-.display-check-skill:nth-child(odd) {
+.display-checklist-check-skill:nth-child(odd) {
 	background-color: #FFEEEE;
 }
 
-.display-check-skill:nth-child(even) {
+.display-checklist-check-skill:nth-child(even) {
 	background-color: #EEEEFF;
 }
 
-.display-check-combo-combo-spec,
-.display-check-combo-combo-note,
-.display-check-effect-effect-spec,
-.display-check-effect-effect-note {
+.display-checklist-check-combo-combo-spec,
+.display-checklist-check-combo-combo-note,
+.display-checklist-check-effect-effect-spec,
+.display-checklist-check-effect-effect-note {
 	margin-left: 16px;
 }
 
-.display-check-combo-combo-spec,
-.display-check-effect-effect-spec {
+.display-checklist-check-combo-combo-spec,
+.display-checklist-check-effect-effect-spec {
 	border-bottom: 2px #DDDDDD solid;
 }

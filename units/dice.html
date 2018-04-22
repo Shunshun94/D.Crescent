@@ -27,34 +27,27 @@
 <script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/clientSelector.js"></script>
 <script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/components/v1/ApplicationBase.js"></script>
 <script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/components/v1/TableBase.js"></script>
+<script src="../main/check/checkDto.js"></script>
 <script src="../main/check/skillCheck.js"></script>
 <script src="../main/check/comboCheck.js"></script>
 <script src="../main/check/effectCheck.js"></script>
 <script src="../main/check/checkList.js"></script>
+<script src="../main/Application.js"></script>
 <script>
 com.hiyoko.util.forEachMap(JSON.parse(localStorage.getItem('com-hiyoko-sample-dx3sheetparse-index') || '{}'), (v, k) => {
 	$('#list').append(`<option value="${k}">${v}</option>`);
 });
-const client = new io.github.shunshun94.trpg.dummy.Room($('#log'));
 
-$('#display').on('tofRoomRequest', function(event) {
-	client[event.method].apply(client, event.args).done(event.resolve).fail(event.reject);
+$('#display').on(io.github.shunshun94.HiyokoCross.Application.EVENTS.AppendCharacterEvent, (e) => {
+	com.hiyoko.util.updateLocalStorage('com-hiyoko-sample-dx3sheetparse-index', $('input').val(), e.character.name);
+	$('#select').hide();
 });
 
 $('#exec').click((e) => {
 	io.github.shunshun94.trpg.selectClient($('input').val()).DX3.getSheet($('input').val()).done((instance) => {
-		new io.github.shunshun94.HiyokoCross.CheckList($('#display'), instance);
-		client.addCharacter({
-			name: instance.name,
-			HP: instance.subStatus.HP,
-			'侵蝕率': instance.subStatus.erotion,
-			'財産ポイント': instance.subStatus.property,
-			'ロイス': instance.lois.filter((lois) => {
-				return !(lois.titus || lois.type === 'Dロイス');
-			}).length
+		new io.github.shunshun94.HiyokoCross.Application($('#display'), instance, {
+			client: new io.github.shunshun94.trpg.dummy.Room($('#log'))
 		});
-		com.hiyoko.util.updateLocalStorage('com-hiyoko-sample-dx3sheetparse-index', $('input').val(), instance.name);
-		$('#select').hide();
 	});
 });
 </script>
