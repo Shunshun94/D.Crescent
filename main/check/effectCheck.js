@@ -59,7 +59,7 @@ io.github.shunshun94.HiyokoCross.EffectCheck = class extends com.hiyoko.componen
 		this.$html.append(
 				`<h3 class="${this.clazz}-header"><span class="${this.id}-name ${this.clazz}-name">エフェクト</span>` +
 				`<button id="${this.id}-toggle">開閉</button></h3>`);
-		this.$html.append(this.effects.map((skill, i) => {return this.generateEffectDom(skill, i)}));
+		this.$html.append(this.effects.map((skill, i) => {return this.generateEffectDom(skill, i)}).join(`<hr class="${this.clazz}-border"/>`));
 		this.$html.append(`<button id="${this.id}-exec">エフェクト行使 (判定は行われず侵蝕率のみ上昇します)</button>`);
 	}
 
@@ -80,7 +80,10 @@ io.github.shunshun94.HiyokoCross.EffectCheck = class extends com.hiyoko.componen
 
 	bindEvents() {
 		this.getElementById('exec').click((e) => {this.useEffects()});
-		this.getElementById('toggle').click((e) => {this.getElementsByClass('effect').toggle(300);});
+		this.getElementById('toggle').click((e) => {
+			this.getElementsByClass('effect').toggle(300);
+			this.getElementById('exec').toggle(300);
+		});
 	}
 
 	generateEffectDom (skill, num) {

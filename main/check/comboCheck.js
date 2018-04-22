@@ -12,8 +12,8 @@ io.github.shunshun94.HiyokoCross.ComboCheck = class extends com.hiyoko.component
 	}
 	buildComponents () {
 		this.$html.append(
-				`<h3 class="${this.clazz}-header"><span class="${this.id}-name ${this.clazz}-name">武器・コンボ</span></h3>`);
-		this.$html.append(this.combos.map((combo, i) => {return this.generateComboDom(combo, i)}));
+				`<h3 class="${this.clazz}-header"><span class="${this.id}-name ${this.clazz}-name">武器・コンボ</span>　<button id="${this.id}-toggle">開閉</button></h3>`);
+		this.$html.append(this.combos.map((combo, i) => {return this.generateComboDom(combo, i)}).join(`<hr class="${this.clazz}-border"/>`));
 	}
 	
 	generateComboDom (combo, num) {
@@ -30,7 +30,7 @@ io.github.shunshun94.HiyokoCross.ComboCheck = class extends com.hiyoko.component
 				`</div>` +
 				`<div class="${this.id}-combo-note">${combo.notes || ''}</div></div>`;
 	}
-	
+
 	clickExec(e) {
 		const $combo = $(e.target).parent();
 		const num = Number($combo.attr('id').split('-').pop());
@@ -39,8 +39,9 @@ io.github.shunshun94.HiyokoCross.ComboCheck = class extends com.hiyoko.component
 		this.fireEvent(check.getCheckEvent());
 		this.fireEvent(check.getSimplerCostEvent());
 	}
-	
+
 	bindEvents() {
 		this.getElementsByClass('combo-exec').click((e) => {this.clickExec(e);});
+		this.getElementById('toggle').click((e) => {this.getElementsByClass('combo').toggle(300);});
 	}
 }; 

@@ -14,6 +14,12 @@
 .display-checklist-check-skill {
 	margin-left: 16px;
 	padding: 4px;
+	display:none;
+}
+
+.display-checklist-check-border {
+	margin:0px;
+	margin-left:16px;
 }
 
 .display-checklist-check-skill:nth-child(odd) {
@@ -34,4 +40,8 @@
 .display-checklist-check-combo-combo-spec,
 .display-checklist-check-effect-effect-spec {
 	border-bottom: 2px #DDDDDD solid;
+}
+
+#display-checklist-check-effect-exec {
+	display:none;
 }
