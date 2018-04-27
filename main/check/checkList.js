@@ -18,6 +18,16 @@ io.github.shunshun94.HiyokoCross.CheckList = class extends com.hiyoko.component.
 		this.buildComponents();
 		this.buildEvents();
 	}
+	
+	buildAttack() {
+		this.$html.append(`<div id="${this.id}-attack" class="${this.id}-attack"></div>`);
+		return new io.github.shunshun94.HiyokoCross.Attack(this.getElementById('attack'));
+	};
+	
+	buildOptionTable() {
+		this.$html.append(`<div id="${this.id}-options" class="${this.id}-check"></div>`);
+		return new io.github.shunshun94.HiyokoCross.CheckOptionTableBase(this.getElementById('options'), this.sheet);
+	}
 
 	buildSkillChecksComponents() {
 		var status = {};
@@ -49,12 +59,16 @@ io.github.shunshun94.HiyokoCross.CheckList = class extends com.hiyoko.component.
 	}
 	
 	buildComponents () {
+		this.attack = this.buildAttack();
+		this.options = this.buildOptionTable();
 		this.checks = this.buildSkillChecksComponents();
 		this.checks.push(this.buildComboChecksComponent());
 		this.checks.push(this.buildEffectChecksComponent());
 	}
 	
 	updateCost(e) {
+		const checkMerged = e.checkDetail.append(this.options.getValues());
+		e.cost = checkMerged.cost;
 		e.type = io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost;
 		this.fireEvent(e);
 	}
@@ -67,10 +81,24 @@ io.github.shunshun94.HiyokoCross.CheckList = class extends com.hiyoko.component.
 		});
 		
 		this.$html.on(io.github.shunshun94.HiyokoCross.EffectCheck.EVENTS.SEND_COST, (e) => {this.updateCost(e)});
+		this.$html.on(io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.AttackEvent, (e) => {
+			e.args[0].name = this.sheet.name;
+			e.type = io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Attack;
+			this.fireEvent(e);
+		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.SimplerCostEvent, (e) => {this.updateCost(e)});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.CheckEvent, (e) => {
+			const checkMerged = e.checkDetail.append(this.options.getValues());
 			e.type = io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Check;
 			e.args[0].name = this.sheet.name;
+			e.args[0].message = checkMerged.getCheckChat();
+			e.resolve = (value) => {
+				this.attack.activate(value, checkMerged);
+			};
+			e.reject = (error) => {
+				alert(`判定実施に失敗しました。\n理由： ${error.result}`);
+				console.error(error);
+			};
 			this.fireEvent(e);
 		});
 	}
@@ -90,5 +118,6 @@ io.github.shunshun94.HiyokoCross.CheckList.generateRndString = () => {
 
 io.github.shunshun94.HiyokoCross.CheckList.EVENTS = {
 	Check: 'io-github-shunshun94-HiyokoCross-CheckList-EVENTS-Check',
-	Cost: 'io-github-shunshun94-HiyokoCross-CheckList-EVENTS-Cost'
+	Cost: 'io-github-shunshun94-HiyokoCross-CheckList-EVENTS-Cost',
+	Attack: 'io-github-shunshun94-HiyokoCross-CheckList-EVENTS-Attack'
 };

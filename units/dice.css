@@ -2,6 +2,14 @@
 	magrin: 32px;
 }
 
+#display-checklist-attack {
+	background-color:#DDDDDD;
+  width: 400px;
+  position: absolute;
+  right: 4px;
+  padding: 4px;
+}
+
 .display-checklist-check {
 	border: 3px inset #DDDDDD;
 	background-color: #EEEEEE;
@@ -45,3 +53,33 @@
 #display-checklist-check-effect-exec {
 	display:none;
 }
+
+#display-checklist-options-table {
+	display: none;
+	margin-left: 16px;
+}
+
+.display-checklist-options-table-header-0,
+.display-checklist-options-table-member-0 {
+	width: 12px;
+}
+
+.display-checklist-options-table-header-2,
+.display-checklist-options-table-member-2,
+.display-checklist-options-table-header-3,
+.display-checklist-options-table-member-3,
+.display-checklist-options-table-header-4,
+.display-checklist-options-table-member-4,
+.display-checklist-options-table-header-5,
+.display-checklist-options-table-member-5,
+.display-checklist-options-table-header-6,
+.display-checklist-options-table-member-6 {
+	width: 48px;
+}
+.com-hiyoko-component-table-base-member-number {
+	width: 46px;
+}
+.com-hiyoko-component-table-base-member-text {
+	width:98%;
+}
+

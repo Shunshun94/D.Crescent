@@ -20,14 +20,20 @@ io.github.shunshun94.HiyokoCross.CheckDto = class {
 	}
 
 	append(checkDto) {
-		let data = {};
-		io.github.shunshun94.HiyokoCross.CheckDto.NUM_PARAMS_NAME.forEach((name) => {
-			data = (this[name] + '+' + checkDto[name]).replace('+-', '-');
-		});
-		data.name = `${this.name}, ${checkDto.name}`;
-		data.text = `${this.text}, ${checkDto.text}`;
-		data.notes = `${this.notes}\n${checkDto.notes}`;
-		return new io.github.shunshun94.HiyokoCross.CheckDto(data);
+		if(Array.isArray(checkDto)) {
+			return checkDto.reduce((acc, current) => {
+				return acc.append(current);
+			}, this);
+		} else {
+			let data = {};
+			io.github.shunshun94.HiyokoCross.CheckDto.NUM_PARAMS_NAME.forEach((name) => {
+				data[name] = (this[name] + '+' + checkDto[name]).replace('+-', '-');
+			});
+			data.name = `${this.name}, ${checkDto.name}`;
+			data.text = `${this.text}`;
+			data.notes = `${this.notes}\n${checkDto.notes}`;
+			return new io.github.shunshun94.HiyokoCross.CheckDto(data);			
+		}
 	}
 
 	isNumber(x) {
@@ -37,10 +43,14 @@ io.github.shunshun94.HiyokoCross.CheckDto = class {
 		else
 			return (x == parseFloat(x) && isFinite(x));
 	}
+	
+	getCheckChat() {
+		return 	`(${this.dice})DX+(${this.hit})@(${this.critical})` +
+				` ${this.name} ${this.text ? '|' : ''} ${this.text}\n${this.notes}`;
+	}
 
-	getCheckEvent(name = 'NO NAME', eventType = io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.CheckEvent) {
-		const message = `${this.dice}DX+${this.hit}@${this.critical}` +
-						` ${this.name} ${this.text ? '|' : ''} ${this.text}\n${this.notes}`;
+	getCheckEvent(name = '', eventType = io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.CheckEvent) {
+		const message = this.getCheckChat();
 		return {
 			type: eventType,
 			method: 'sendChat',
@@ -52,10 +62,10 @@ io.github.shunshun94.HiyokoCross.CheckDto = class {
 		};
 	}
 
-	getAttackEvent(value, name = 'NO NAME', eventType = io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.AttackEvent) {
+	getAttackEvent(value, name = '', eventType = io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.AttackEvent) {
 		if(Number(value)) {
 			const dices = 1 + Math.floor(Number(value) / 10);
-			const message = `${dices} ${this.name} ${this.text ? '|' : ''} ${this.text}\n${this.notes}`;
+			const message = `${dices}d10+${value} ${this.name} ${this.text ? '|' : ''} ${this.text}\n${this.notes}`;
 			return {
 				type: eventType,
 				method: 'sendChat',
@@ -88,7 +98,7 @@ io.github.shunshun94.HiyokoCross.CheckDto = class {
 		}
 	}
 
-	getCostEvent(currentValue = 0, name = 'NO NAME', eventType = io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.CostEvent) {
+	getCostEvent(currentValue = 0, name = '', eventType = io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.CostEvent) {
 		let text = '';
 		if(String(this.cost).indexOf('d10') > -1) {
 			if(currentValue) {

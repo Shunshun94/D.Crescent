@@ -26,7 +26,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Check, (event) => {
-			event.args[0].message = this.erotion.getRnroachBonus() + '+' + event.args[0].message;
+			event.args[0].message = event.args[0].message.replace('(', `(${this.erotion.getRnroachBonus()}+`);
 			this.sendChatAsyn(event.args[0]).then((result) => {
 				this.max = (result > this.max) ? result : this.max;
 				((event.resolve) || (console.log))(result);
@@ -35,13 +35,16 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost, (event) => {
 			if(/[1-9]/.exec(event.cost)) {
 				const text = (String(event.cost).indexOf('d10') > -1) ?
-						`${this.erotion.getCurrentEnroach()} + ${event.cost} | 侵蝕率上昇` :
-						`C(${this.erotion.getCurrentEnroach()} + ${event.cost}) | 侵蝕率上昇`;
+						`${this.erotion.getCurrentEnroach()}+${event.cost} | 侵蝕率上昇` :
+						`C(${this.erotion.getCurrentEnroach()}+${event.cost}) | 侵蝕率上昇`;
 				this.sendChatAsyn({message: text}).then((result) => {
 					this.erotion.setCurrentEnroach(result);
 					((event.resolve) || (console.log))(result);
 				}, (event.reject) || (console.log));
 			}
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Attack, (event) => {
+			this.client.sendChat(event.args[0]);
 		});
 	}
 
