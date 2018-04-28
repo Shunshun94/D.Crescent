@@ -48,7 +48,7 @@ MIT ライセンスです。
 
 以下のどちらかでキャラクターシートを作る。
 
-* [キャラクター保管庫](https://charasheet.vampire-blood.net/dx3_pc_making.html)
+* [キャラクター保管所](https://charasheet.vampire-blood.net/dx3_pc_making.html)
 * [キャラクターシート倉庫](https://character-sheets.appspot.com/dx3/)
 
 本アプリはどちらで作ったキャラクターシートにも対応する。
