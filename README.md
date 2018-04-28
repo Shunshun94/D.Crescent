@@ -5,9 +5,12 @@
 オンセにおけるダブルクロス the 3rd Edition ([公式ページ](http://www.fear.co.jp/dbx3rd/)) の進行をスムーズにするツール。
 *これから作る。まだ使えるわけではない。*
 
+[つけたい機能一覧](./docs/FunctionList.md)
+
 ### プレ公開
 
-[ロイス/タイタス および メモリーの管理](./units/lois.html)
+- [ロイス/タイタス および メモリーの管理](./units/lois.html)
+- [判定の管理](./units/dice.html)
 
 ### 更新履歴
 
@@ -45,10 +48,10 @@ MIT ライセンスです。
 
 以下のどちらかでキャラクターシートを作る。
 
-* [キャラクター保管庫](http://charasheet.vampire-blood.net/dx3_pc_making.html)
-* [キャラクターシート](https://character-sheets.appspot.com/dx3/)
+* [キャラクター保管庫](https://charasheet.vampire-blood.net/dx3_pc_making.html)
+* [キャラクターシート倉庫](https://character-sheets.appspot.com/dx3/)
 
-本アプリはどちらで作ったキャラクターシートにも対応する予定である。
+本アプリはどちらで作ったキャラクターシートにも対応する。
 
 ### オンセ会場
 
