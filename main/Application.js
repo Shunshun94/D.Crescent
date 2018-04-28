@@ -26,7 +26,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Check, (event) => {
-			event.args[0].message = event.args[0].message.replace('(', `(${this.erotion.getRnroachBonus()}+`);
+			event.args[0].message = event.args[0].message.replace('(', `(${this.erotion.getEnroachBonus().dice}+`);
 			this.sendChatAsyn(event.args[0]).then((result) => {
 				this.max = (result > this.max) ? result : this.max;
 				((event.resolve) || (console.log))(result);
@@ -39,6 +39,10 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 						`C(${this.erotion.getCurrentEnroach()}+${event.cost}) | 侵蝕率上昇`;
 				this.sendChatAsyn({message: text}).then((result) => {
 					this.erotion.setCurrentEnroach(result);
+					this.client.updateCharacter({
+						targetName: this.sheet.name,
+						'侵蝕率': result
+					});
 					((event.resolve) || (console.log))(result);
 				}, (event.reject) || (console.log));
 			}
@@ -171,15 +175,38 @@ io.github.shunshun94.HiyokoCross.Application.EVENTS = {
 
 
 io.github.shunshun94.HiyokoCross.ErotionManage = io.github.shunshun94.HiyokoCross.ErotionManage || class {
-	constructor(dummy, sheet){this.erotion = sheet.subStatus.erotion;}
+	constructor(dummy, sheet){
+		this.erotion = sheet.subStatus.erotion;
+		this.erotionEffects = [
+			{border: 60, dice:0, effect:0, original: 0},
+			{border: 80, dice:1, effect:0, original: 0},
+			{border:100, dice:2, effect:0, original: 1},
+			{border:130, dice:3, effect:1, original: 2},
+			{border:150, dice:4, effect:1, original: 2},
+			{border:160, dice:4, effect:1, original: 3},
+			{border:190, dice:4, effect:2, original: 3},
+			{border:200, dice:4, effect:2, original: 3},
+			{border:220, dice:5, effect:2, original: 4},
+			{border:260, dice:5, effect:3, original: 4},
+			{border:300, dice:6, effect:3, original: 4},
+			{border:999, dice:7, effect:3, original: 4}
+		];
+	}
 	setCurrentEnroach(val) {
 		this.erotion = val;
 	}
 	getCurrentEnroach() {
 		return this.erotion;
 	}
-	getRnroachBonus() {
-		return 0;
+	getEnroachBonus() {
+		const cands = this.erotionEffects.filter((effect) => {
+			return effect.border > this.erotion;
+		});
+		if(cands.length) {
+			return cands[0];
+		} else {
+			return {dice:7, effect:3, original: 4};
+		}
 	}
 }
 io.github.shunshun94.HiyokoCross.CheckList = io.github.shunshun94.HiyokoCross.CheckList || class {constructor() {}};

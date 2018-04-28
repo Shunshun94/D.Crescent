@@ -48,7 +48,7 @@ $('#display').on(io.github.shunshun94.HiyokoCross.Application.EVENTS.AppendChara
 $('#exec').click((e) => {
 	io.github.shunshun94.trpg.selectClient($('input').val()).DX3.getSheet($('input').val()).done((instance) => {
 		new io.github.shunshun94.HiyokoCross.Application($('#display'), instance, {
-			client: new io.github.shunshun94.trpg.dummy.Room($('#log'))
+			client: new io.github.shunshun94.trpg.dummy.Room($('#log'), {dice:true})
 		});
 	});
 });

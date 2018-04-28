@@ -104,7 +104,7 @@ io.github.shunshun94.HiyokoCross.CheckList = class extends com.hiyoko.component.
 	}
 }
 
-io.github.shunshun94.HiyokoCross.CheckList.CHECK_RESULT_REGEXP = new RegExp(" → ([0-9]+)$");
+io.github.shunshun94.HiyokoCross.CheckList.CHECK_RESULT_REGEXP = new RegExp("→ ([0-9]+)$");
 io.github.shunshun94.HiyokoCross.CheckList.STATUS = ['body', 'sense', 'mind', 'society'];
 io.github.shunshun94.HiyokoCross.CheckList.STATUS_JP = ['肉体', '感覚', '精神', '社会'];
 io.github.shunshun94.HiyokoCross.CheckList.generateRndString = () => {
