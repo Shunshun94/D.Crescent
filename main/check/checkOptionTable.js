@@ -19,11 +19,11 @@ io.github.shunshun94.HiyokoCross.CheckOptionTableBase = class extends com.hiyoko
 		this.options.clear();
 		this.effects.forEach((effect) => {
 			this.options.addMember();
-			this.options.setLine([false, `エフェクト ${effect.name}`, 0, 0, 0, 0, effect.cost, effect.notes]);
+			this.options.setLine([false, effect.name, 0, 0, 0, 0, effect.cost, effect.notes]);
 		});
 		this.items.forEach((item) => {
 			this.options.addMember();
-			this.options.setLine([false, `アイテム ${item.name}`, 0, 0, 0, 0, 0, '']);
+			this.options.setLine([false, item.name, 0, 0, 0, 0, 0, '']);
 		});
 		JSON.parse(localStorage.getItem(this.storageId) || '[]').forEach((data) => {
 			this.options.addMember();

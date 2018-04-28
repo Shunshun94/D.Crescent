@@ -67,8 +67,10 @@ io.github.shunshun94.HiyokoCross.CheckList = class extends com.hiyoko.component.
 	}
 	
 	updateCost(e) {
-		const checkMerged = e.checkDetail.append(this.options.getValues());
-		e.cost = checkMerged.cost;
+		if(e.checkDetail) {
+			const checkMerged = e.checkDetail.append(this.options.getValues());
+			e.cost = checkMerged.cost;
+		}
 		e.type = io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost;
 		this.fireEvent(e);
 	}
