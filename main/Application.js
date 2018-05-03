@@ -14,14 +14,20 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	buildComponents() {
+		this.$html.append(`<div id="${this.id}-erotion"></div>`);
+		this.erotion = new io.github.shunshun94.HiyokoCross.ErotionManage(this.getElementById('erotion'), this.sheet);
+		this.$html.append(`<button id="${this.id}-toggle">判定 / ロイス切り替え</button>`);
 		this.$html.append(`<div id="${this.id}-checklist"></div>`);
 		this.checkList = new io.github.shunshun94.HiyokoCross.CheckList(this.getElementById('checklist'), this.sheet);
 		this.$html.append(`<div id="${this.id}-lois"></div>`);
-		this.$html.append(`<div id="${this.id}-erotion"></div>`);
-		this.erotion = new io.github.shunshun94.HiyokoCross.ErotionManage(this.getElementById('erotion'), this.sheet);
+		this.loisList = new io.github.shunshun94.HiyokoCross.Lois(this.getElementById('lois'), this.sheet);
 	}
 
 	bindEvents() {
+		this.getElementById('toggle').click((e) => {
+			this.getElementById('checklist').toggle(400);
+			this.getElementById('lois').toggle(400);
+		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
 			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
@@ -36,7 +42,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			if(/[1-9]/.exec(event.cost)) {
 				const text = (String(event.cost).indexOf('d10') > -1) ?
 						`${this.erotion.getCurrentEnroach()}+${event.cost} | 侵蝕率上昇` :
-						`C(${this.erotion.getCurrentEnroach()}+${event.cost}) | 侵蝕率上昇`;
+						`${this.erotion.getCurrentEnroach()}+${event.cost}+1d1-1 | 侵蝕率上昇`;
 				this.sendChatAsyn({message: text}).then((result) => {
 					this.erotion.setCurrentEnroach(result);
 					this.client.updateCharacter({
@@ -70,6 +76,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			}
 			const key = io.github.shunshun94.HiyokoCross.CheckList.generateRndString();
 			params.message += ` ${key}`;
+			params.bot = 'DoubleCross';
 			const getChatEvent = this.getAsyncEvent(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, {
 				method: 'getChat'
 			}).done((result) => {
@@ -77,7 +84,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 					return msg[1].message.indexOf(key) > -1;
 				});
 				if(sendMessage.length) {
-					const regexpResult = io.github.shunshun94.HiyokoCross.CheckList.CHECK_RESULT_REGEXP.exec(sendMessage[0][1].message);
+					const regexpResult = io.github.shunshun94.HiyokoCross.CheckList.CHECK_RESULT_REGEXP.exec(com.hiyoko.DodontoF.V2.fixChatMsg(sendMessage[0]).msg);
 					if(regexpResult) {
 						resolve(Number(regexpResult[1]));
 					} else {
@@ -151,7 +158,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	appendCharacter() {
-		this.client.addCharacter({
+		this.client.addCharacter({ 
 			name: this.sheet.name,
 			HP: this.sheet.subStatus.HP,
 			'侵蝕率': this.sheet.subStatus.erotion,
