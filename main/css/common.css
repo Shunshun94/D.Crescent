@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+#io-github-shunshun94-Dummy {
+	display: none;
+}
+
+#io-github-shunshun94-HiyokoCross {
+	background-color: #C0C0D0;
+	padding: 8px;
+}
+
+footer {
+	border-top: 2px solid #b80b86;
+	font-size: 70%;
+	background-color: #D0D0E0;
+	height:80px;
+	padding: 8px;
+}
