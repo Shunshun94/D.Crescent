@@ -71,23 +71,23 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 			const loises = this.getData().lois;
 			const dLois = loises.filter((lois) => {
 				return lois.type === 'Dロイス';
-			}).map((lois) => {return lois.name});
+			}).map((lois) => {return `　　${lois.name}`});
 			const titus = loises.filter((lois) => {
 				return lois.titus;
 			}).map((lois) => {
 				if(lois.used) {
-					return lois.name + ' (昇華済)';
+					return `　　${lois.name}(昇華済)`;
 				} else {
-					return lois.name;
+					return `　　${lois.name}`;
 				}
 			});
 			const normalLois = loises.filter((lois) => {
 				return (! Boolean(lois.titus)) && lois.type !== 'Dロイス'
 			}).map((lois) => {  
 				if(lois.isSLois) {
-					return lois.name + ' (Sロイス)';
+					return `　　${lois.name} (Sロイス)`;
 				} else {
-					return lois.name;
+					return `　　${lois.name}`;
 				}
 			});
 			
