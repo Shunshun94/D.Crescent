@@ -28,3 +28,12 @@
 #entrance-tof-option-back {
 	margin-bottom: 1em;
 }
+
+footer {
+	margin-top:16px;
+	border-top: 2px solid #b80b86;
+	font-size: 70%;
+	background-color: #D0D0E0;
+	height:80px;
+	padding: 8px;
+}
