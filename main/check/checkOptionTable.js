@@ -124,5 +124,5 @@ io.github.shunshun94.HiyokoCross.CheckOptionTable.COLS = [
 	{title:'', type:'check'}, {title:'名称', type:'text'},
 	{title:'ダイス', type: 'number'}, {title:'達成値', type:'number'},
 	{title:'クリ値', type: 'number'}, {title:'攻撃力', type: 'number'},
-	 {title:'侵蝕率', type: 'number'},{title:'説明', type: 'text'}
+	 {title:'侵蝕率', type: 'text'},{title:'説明', type: 'text'}
 ];
