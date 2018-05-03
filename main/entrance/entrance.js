@@ -22,10 +22,12 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 	
 	bindEvents() {
 		this.getElementById('sheet-tof').click((e) => {
+			this.getElementById('init').show();
 			this.getElementById('tof').show(com.hiyoko.component.InputFlow.Child.SPEED);
 			this.getElementById('sheet').hide(com.hiyoko.component.InputFlow.Child.SPEED);
 		});
 		this.getElementById('sheet-discord').click((e) => {
+			this.getElementById('init').show();
 			this.getElementById('discord').show(com.hiyoko.component.InputFlow.Child.SPEED);
 			this.getElementById('sheet').hide(com.hiyoko.component.InputFlow.Child.SPEED);
 		});
@@ -38,9 +40,13 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		this.getElementById('discord').on(com.hiyoko.component.InputFlow.Events.Finish, (e) => {
 			this.buildDiscordUrl(e);
 		});
+		this.getElementById('init').click((e) => {
+			location.reload();
+		});
 	}
 	
 	buildDom() {
+		this.$html.append(`<button id="${this.id}-init">シート URL から入力しなおす</button><hr/>`);
 		this.$html.append(
 			`<div id="${this.id}-sheet"><p>` +
 			`キャラクターシートの URL： <input list="${this.id}-sheet-list" id="${this.id}-sheet-input" type="text" /></p>` +
@@ -71,6 +77,7 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 				`</div></div>`
 		);
 		this.$html.append(`<div id="${this.id}-discord"></div>`);
+		this.getElementById('init').hide();
 		this.getElementById('tof-url-FreeInput').hide();
 		this.getElementById('tof').hide();
 		this.getElementById('discord').hide();
