@@ -70,18 +70,18 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 
 	handleSublimation(val, line) {
 		const lineInfo = this.getLine(line);
-		if(! line.find('.display-loises-member-6 > input').prop('checked')) {
+		if(! line.find(`.${this.id}-member-6 > input`).prop('checked')) {
 			if(window.confirm('昇華されたタイタスを戻すことは原則としてできません。\n本当に昇華されたタイタスを未昇華に戻しますか?')) {
 				this.sendMessage(`[特例的処理] ${lineInfo[0]} への昇華されたタイタスを未昇華の状態に戻しました。`); 
 			} else {
-				line.find('.display-loises-member-6 > input').prop('checked', true);
+				line.find(`.${this.id}-member-6 > input`).prop('checked', true);
 			}
 			return;
 		}
 		
 		if(! lineInfo[5]) {
 			alert('ロイスのまま昇華することはできません。昇華する前にタイタスにしてください');
-			line.find('.display-loises-member-6 > input').prop('checked', false);
+			line.find(`.${this.id}-member-6 > input`).prop('checked', false);
 			return;
 		}
 		
@@ -95,19 +95,19 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 	handleTitus(val, line) {
 		const lineInfo = this.getLine(line);
 		const revertTitus = () => {
-			line.find('.display-loises-member-5 > input').prop('checked', false);
+			line.find(`.${this.id}-member-5 > input`).prop('checked', false);
 		}
-		if(! line.find('.display-loises-member-5 > input').prop('checked')) {
+		if(! line.find(`.${this.id}-member-5 > input`).prop('checked')) {
 			if(lineInfo[6]) {
 				alert('ロイスに戻そうにもすでに昇華済です。\n何らかの特例的処理で戻す場合は先に昇華を解除してください');
-				line.find('.display-loises-member-5 > input').prop('checked', true);
+				line.find(`.${this.id}-member-5 > input`).prop('checked', true);
 				return;
 			}
 			if(window.confirm('タイタスをロイスに戻すことは原則としてできません。\n本当にタイタスをロイスにもどしますか?')) {
 				this.sendMessage(`[特例的処理] ${lineInfo[0]} へのタイタスをロイスに戻しました。`); 
 				this.updateRequest();
 			} else {
-				line.find('.display-loises-member-5 > input').prop('checked', true);
+				line.find(`.${this.id}-member-5 > input`).prop('checked', true);
 			}
 			return;
 		}
@@ -132,25 +132,25 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 
 	handleSLois(val, line) {
 		const lineInfo = this.getLine(line);
-		if(! line.find('.display-loises-member-4 > input').prop('checked')) {
+		if(! line.find(`.${this.id}-member-4 > input`).prop('checked')) {
 			if(lineInfo[5]) {
 				alert('普通のロイスに戻そうにも既にタイタスになっています。\n何らかの特例処理で戻す場合は先にタイタスから戻してください')
-				line.find('.display-loises-member-4 > input').prop('checked', true);
+				line.find(`.${this.id}-member-4 > input`).prop('checked', true);
 				return;
 			}
 			if(window.confirm('Sロイスを普通のロイスに戻すことは原則としてできません。\n本当にSロイスを普通のロイスにもどしますか?')) {
 				this.sendMessage(`[特例的処理] ロイス ${lineInfo[0]} を S ロイスから通常のロイスに戻しました。`);
 			} else {
-				line.find('.display-loises-member-4 > input').prop('checked', true);
+				line.find(`.${this.id}-member-4 > input`).prop('checked', true);
 			}
 			return;
 		}
 		
 		const revertSLois = () => {
-			line.find('.display-loises-member-4 > input').prop('checked', false);
+			line.find(`.${this.id}-member-4 > input`).prop('checked', false);
 		}
 		
-		const hasSLois = Boolean($('.display-loises-member-4 > input').filter((i, $elem) => {
+		const hasSLois = Boolean($(`.${this.id}-member-4 > input`).filter((i, $elem) => {
 			return $($elem).prop('checked');
 		}).length > 1);
 
