@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+#entrance {
+	background-color: #C0C0D0;
+}
+
+.entrance-tof-room-rooms-room,
+.entrance-discord-room-room {
+	border: 4px double #b80b86;
+	background-color: #000060;
+	color: #C0C0B0;
+	border-radius: 1em;
+	padding: 1em;
+	margin-top:1em;
+}
+
+.entrance-tof-room-rooms-room-name:before,
+.entrance-discord-room-room-name:before {content:'"';}
+.entrance-tof-room-rooms-room-name:after,
+.entrance-discord-room-room-name:after {content:'"';}
+
+.entrance-tof-room-rooms-room-entry,
+.entrance-discord-room-room-entry {
+	margin-top: 8px;
+}
+
+#entrance-tof-password-back,
+#entrance-tof-option-back {
+	margin-bottom: 1em;
+}
+
+footer {
+	margin-top:16px;
+	border-top: 2px solid #b80b86;
+	font-size: 70%;
+	background-color: #D0D0E0;
+	height:80px;
+	padding: 8px;
+}
