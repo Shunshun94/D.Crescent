@@ -21,6 +21,13 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 	}
 	
 	bindEvents() {
+		this.getElementById('sheet-input').change((e) => {
+			if(this.getElementById('sheet-input').val()) {
+				this.getElementById('sheet > button').show();
+			} else {
+				this.getElementById('sheet > button').hide();
+			}
+		});
 		this.getElementById('sheet-tof').click((e) => {
 			this.getElementById('init').show();
 			this.getElementById('tof').show(com.hiyoko.component.InputFlow.Child.SPEED);
@@ -81,6 +88,7 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		this.getElementById('tof-url-FreeInput').hide();
 		this.getElementById('tof').hide();
 		this.getElementById('discord').hide();
+		this.getElementById('sheet > button').hide();
 		com.hiyoko.util.forEachMap(JSON.parse(localStorage.getItem('com-hiyoko-sample-dx3sheetparse-index') || '{}'), (v, k) => {
 			$(`#${this.id}-sheet-list`).append(`<option value="${k}">${v}</option>`);
 		});
