@@ -6,6 +6,9 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 	constructor($html, sheet){
 		super($html);
 		this.sheet = sheet;
+		this.loisCount = this.sheet.lois.filter((lois) => {
+			return !(lois.titus || lois.type === 'Dロイス');
+		}).length;
 		this.erotionEffects = [
 			{border: 60, dice:0, effect:0, original: 0},
 			{border: 80, dice:1, effect:0, original: 0},
@@ -27,10 +30,10 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 	}
 	buildComponents() {
 		const base1 = $(`<div></div>`);
-		base1.append(`<span>侵蝕率：<input type="number" id="${this.id}-value"/></span><br/>`);
+		base1.append(`<span>侵蝕率：<input type="number" id="${this.id}-value"/> / ロイス残数： <span id="${this.id}-lois"></span></span><br/>`);
 		base1.append(`<span>侵蝕率ボーナス：<span id="${this.id}-bonus"></span></span>`);
 		this.$html.append(base1);
-		
+		this.updateLoisCount()
 		this.setCurrentEnroach(this.sheet['侵蝕率'] || this.sheet.subStatus.erotion);
 	}
 	
@@ -41,7 +44,6 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		} else {
 			this.getElementById('bonus').text(` エフェクトレベル ＋${bonus.effect} / ダイスボーナス ＋${bonus.dice}`);
 		}
-		
 	}
 
 	setCurrentEnroach(val) {
@@ -61,5 +63,9 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		} else {
 			return {dice:7, effect:3, original: 4};
 		}
+	}
+	updateLoisCount(opt_count) {
+		this.loisCount = opt_count || this.loisCount;
+		this.getElementById('lois').text(this.loisCount);
 	}
 };

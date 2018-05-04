@@ -45,7 +45,10 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			}, (event.reject) || (console.log));
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST, (event) => {
-			this.client.updateCharacter(event.args).then((ok)=>{}, (err)=>{
+			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, event.args.targetName , this.loisList.getData());
+			this.client.updateCharacter(event.args).then((ok)=>{
+				this.erotion.updateLoisCount(event.args['ロイス'])
+			}, (err)=>{
 				console.error(err);
 				alert(`イニシアティブ表の更新に失敗しました\n理由: ${err.result || err}`);
 			});
@@ -170,6 +173,13 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	appendCharacter() {
+		const saveLoisMemoryData = com.hiyoko.util.getLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name);
+		if(saveLoisMemoryData && window.confirm('前回プレイしたときのロイス情報が残っています。読み込みますか?')) {
+			for(var key in saveLoisMemoryData) {
+				this.sheet[key] = saveLoisMemoryData[key];
+			}
+		}
+		
 		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
 			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
@@ -235,6 +245,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = io.github.shunshun94.HiyokoCros
 			return {dice:7, effect:3, original: 4};
 		}
 	}
+	updateLoisCount(count) {/* NULL */}
 }
 io.github.shunshun94.HiyokoCross.CheckList = io.github.shunshun94.HiyokoCross.CheckList || class {constructor() {}};
 io.github.shunshun94.HiyokoCross.Lois = io.github.shunshun94.HiyokoCross.Lois || class {constructor() {}};

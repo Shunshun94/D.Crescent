@@ -138,3 +138,4 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 };
 
 io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST = 'io-github-shunshun94-HiyokoCross-Lois-UPDATE_LOIS_REQUEST';
+io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE = 'io-github-shunshun94-HiyokoCross-Lois-KEEP_STORE';

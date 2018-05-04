@@ -54,6 +54,7 @@
 const query = com.hiyoko.util.getQueries();
 try {
 	io.github.shunshun94.trpg.selectClient(query.sheet).DX3.getSheet(query.sheet).done((sheet) => {
+			com.hiyoko.util.updateLocalStorage('com-hiyoko-sample-dx3sheetparse-index', query.sheet, sheet.name);
 			if(! Boolean(query.url || query.token)) {
 				query.url = $('#io-github-shunshun94-Dummy');
 			}
@@ -66,6 +67,7 @@ try {
 		
 	});	
 } catch(e) {
+	console.error(e, query, location.search);
 	if(String(e).endsWith("'trim' of undefined")) {
 		alert('キャラクターシートが入力されていません');
 	} else {
