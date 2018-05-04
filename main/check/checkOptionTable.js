@@ -25,14 +25,14 @@ io.github.shunshun94.HiyokoCross.CheckOptionTableBase = class extends com.hiyoko
 			this.options.addMember();
 			this.options.setLine([false, item.name, 0, 0, 0, 0, 0, '']);
 		});
-		JSON.parse(localStorage.getItem(this.storageId) || '[]').forEach((data) => {
+		JSON.parse(localStorage.getItem('io-github-shunshun94-HiyokoCross-CheckOption') || '[]').forEach((data) => {
 			this.options.addMember();
 			this.options.setLine(data);
 		});
 	}
 	saveOptions(e) {
 		const list = e.value.slice(this.defaultLength);
-		localStorage.setItem(this.storageId, JSON.stringify(list));
+		localStorage.setItem('io-github-shunshun94-HiyokoCross-CheckOption', JSON.stringify(list));
 	}
 	
 	
