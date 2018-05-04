@@ -27,7 +27,50 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 			return lois.name.indexOf('起源種') > -1;
 		}).length;
 		this.buildComponents();
+		this.bindEvents();
 	}
+
+	updateValue() {
+		this.fireEvent({
+			type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_EROTION_VALUE,
+			value: Number(this.getElementById('value').val())
+		})
+	}
+
+	throwEntry() {
+		if(confirm('シーン登場します。よろしいですか?')) {
+			this.fireEvent({
+				type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.ADD_EROTION_VALUE,
+				cost: '1d10 登場'
+			});
+		}
+	}
+
+	throwImpulse() {
+		if(confirm('衝動判定による侵蝕率上昇を行います。よろしいですか?')) {
+			this.fireEvent({
+				type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.ADD_EROTION_VALUE,
+				cost: '2d10 衝動判定実施'
+			});
+		}
+	}
+
+	throwGeneshift() {
+		if(confirm('ジェネシフトを行います。よろしいですか?')) {
+			this.fireEvent({
+				type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.ADD_EROTION_VALUE,
+				cost: `${this.getElementById('geneshift-value').val()}d10 ジェネシフト`
+			});
+		}
+	}
+
+	bindEvents() {
+		this.getElementById('value').change((e) => {this.updateValue();});
+		this.getElementById('entry').click((e) => {this.throwEntry();});
+		this.getElementById('impulse').click((e) => {this.throwImpulse();});
+		this.getElementById('geneshift-exec').click((e) => {this.throwGeneshift();});
+	}
+	
 	buildComponents() {
 		const base1 = $(`<div></div>`);
 		base1.append(`<span>侵蝕率：<input type="number" id="${this.id}-value"/> / ロイス残数： <span id="${this.id}-lois"></span></span><br/>`);
@@ -35,6 +78,18 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		this.$html.append(base1);
 		this.updateLoisCount()
 		this.setCurrentEnroach(this.sheet['侵蝕率'] || this.sheet.subStatus.erotion);
+		
+		const base2 = $(`<div></div>`);
+		let max = 1;
+		for(var key in this.sheet.status) {
+			const statusValue = Number(this.sheet.status[key]);
+			max = (max < statusValue) ? statusValue : max;
+		}
+
+		base2.append(`<button id="${this.id}-entry">シーン登場する</button><br/>`);
+		base2.append(`<button id="${this.id}-impulse">衝動判定による侵蝕率上昇</button><br/>`)
+		base2.append(`<span id="${this.id}-geneshift">ジェネシフト： <input type="number" value="1" min="1" max="${max}" id="${this.id}-geneshift-value"/><button id="${this.id}-geneshift-exec">ジェネシフトする</button></span>`);
+		this.$html.append(base2);
 	}
 	
 	setCurrentBonus(opt_bonus) {
@@ -68,4 +123,9 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		this.loisCount = opt_count || this.loisCount;
 		this.getElementById('lois').text(this.loisCount);
 	}
+};
+
+io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS = {
+	UPDATE_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-UPDATE_EROTION_VALUE',
+	ADD_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-ADD_EROTION_VALUE'
 };

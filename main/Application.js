@@ -32,6 +32,22 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.loisList = new io.github.shunshun94.HiyokoCross.Lois(this.getElementById('lois'), this.sheet);
 	}
 
+	updateCost(event) {
+		if(/[1-9]/.exec(event.cost)) {
+			const text = (String(event.cost).indexOf('d10') > -1) ?
+					`${this.erotion.getCurrentEnroach()}+${event.cost} | 侵蝕率上昇` :
+					`${this.erotion.getCurrentEnroach()}+${event.cost}+1d1-1 | 侵蝕率上昇`;
+			this.sendChatAsyn({message: text}).then((result) => {
+				this.erotion.setCurrentEnroach(result);
+				this.client.updateCharacter({
+					targetName: this.sheet.name,
+					'侵蝕率': result
+				});
+				((event.resolve) || (console.log))(result);
+			}, (event.reject) || (console.log));
+		}
+	}
+
 	bindEvents() {
 		this.getElementById('toggle').click((e) => {
 			this.getElementById('checklist').toggle(400);
@@ -54,22 +70,25 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			});
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost, (event) => {
-			if(/[1-9]/.exec(event.cost)) {
-				const text = (String(event.cost).indexOf('d10') > -1) ?
-						`${this.erotion.getCurrentEnroach()}+${event.cost} | 侵蝕率上昇` :
-						`${this.erotion.getCurrentEnroach()}+${event.cost}+1d1-1 | 侵蝕率上昇`;
-				this.sendChatAsyn({message: text}).then((result) => {
-					this.erotion.setCurrentEnroach(result);
-					this.client.updateCharacter({
-						targetName: this.sheet.name,
-						'侵蝕率': result
-					});
-					((event.resolve) || (console.log))(result);
-				}, (event.reject) || (console.log));
-			}
+			this.updateCost(event);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Attack, (event) => {
 			this.client.sendChat(event.args[0]);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.ADD_EROTION_VALUE, (event) => {
+			this.updateCost(event);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_EROTION_VALUE, (event) => {
+			this.erotion.setCurrentEnroach(event.value);
+			this.client.updateCharacter({
+				targetName: this.sheet.name,
+				'侵蝕率': event.value
+			}).then((dummy) => {
+				this.client.sendChat({
+					name: this.sheet.name,
+					message: `侵蝕率修正： ${event.value}`
+				});
+			});
 		});
 	}
 
