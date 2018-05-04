@@ -9,6 +9,19 @@
 	padding: 8px;
 }
 
+#io-github-shunshun94-HiyokoCross-header {
+	font-size: 80%;
+}
+
+#io-github-shunshun94-HiyokoCross-header > span {
+	font-size: 120%;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion {
+	border-bottom: 2px solid #b80b86;
+	margin-bottom:4px;
+}
+
 footer {
 	border-top: 2px solid #b80b86;
 	font-size: 70%;
