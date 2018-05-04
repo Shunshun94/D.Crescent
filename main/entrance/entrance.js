@@ -10,14 +10,18 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		this.bindEvents();
 	}
 	
+	getSheetId() {
+		return this.getElementById('sheet-input').val().replace('=', '%EQUAL%');
+	}
+	
 	buildTofUrl(e) {
-		document.location = `./dcrescent.html?sheet=${this.getElementById('sheet-input').val()}&url=${e.value.url}&room=${e.value.room.no}&pass=${e.value.password.password}`;
+		document.location = `./dcrescent.html?sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room.no}&pass=${e.value.password.password}`;
 	}
 	buildDiscordUrl(e) {
-		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getElementById('sheet-input').val()}&url=${e.value.url}&room=${e.value.room}&dicebot=${e.value.dicebot}`
+		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room}&dicebot=${e.value.dicebot}`
 	}
 	buildDummyUrl(e) {
-		document.location = `./dcrescent.html?sheet=${this.getElementById('sheet-input').val()}`;
+		document.location = `./dcrescent.html?sheet=${this.getSheetId()}`;
 	}
 	
 	bindEvents() {
