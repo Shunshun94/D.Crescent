@@ -44,6 +44,12 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 				((event.resolve) || (console.log))(result);
 			}, (event.reject) || (console.log));
 		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST, (event) => {
+			this.client.updateCharacter(event.args).then((ok)=>{}, (err)=>{
+				console.error(err);
+				alert(`イニシアティブ表の更新に失敗しました\n理由: ${err.result || err}`);
+			});
+		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost, (event) => {
 			if(/[1-9]/.exec(event.cost)) {
 				const text = (String(event.cost).indexOf('d10') > -1) ?

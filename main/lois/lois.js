@@ -20,14 +20,13 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 	updateInitiativeTable() {
 		const data = this.getData();
 		this.fireEvent({
-			type: 'tofRoomRequest',
-			method: 'updateCharacter',
-			args: [{
+			type: io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST,
+			args: {
 				targetName: this.sheet.name,
 				'ロイス': data.lois.filter((lois) => {
 					return !(lois.titus || lois.type === 'Dロイス');
 				}).length
-			}]
+			}
 		});
 	}
 
@@ -137,3 +136,5 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 		});
 	}
 };
+
+io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST = 'io-github-shunshun94-HiyokoCross-Lois-UPDATE_LOIS_REQUEST';
