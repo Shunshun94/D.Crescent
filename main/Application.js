@@ -8,12 +8,21 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.client = opts.client || new io.github.shunshun94.trpg.dummy.Room($(`#${this.id}-log`));
 		this.sheet = sheet;
 		this.max = 0;
-		this.appendCharacter();
-		this.buildComponents(opts);
-		this.bindEvents();
+		this.appendCharacter().then((sheets) => {
+			this.sheet = sheets[0];
+			this.buildComponents(opts);
+			this.bindEvents();
+		}, (err) => {
+			console.error(err);
+			alert(`キャラクターシートの連携に失敗しました。\n理由: ${err.result || err}\nリロードするか、前の画面に戻ってやりなおすか、ないしは開発者 Twitter にこのエラーメッセージのスクショを送ってください `);
+		});
 	}
 
 	buildComponents() {
+		this.$html.append(`<h1 id="${this.id}-header"></h1>`);
+		this.client.getRoomInfo().then((result) => {
+			this.getElementById('header').append(`<span id="${this.id}-header-name">${this.sheet.name}</span> @ <span id="${this.id}-header-room">${result.roomName}</span> - DCrescent`);
+		});
 		this.$html.append(`<div id="${this.id}-erotion"></div>`);
 		this.erotion = new io.github.shunshun94.HiyokoCross.ErotionManage(this.getElementById('erotion'), this.sheet);
 		this.$html.append(`<button id="${this.id}-toggle">判定 / ロイス切り替え</button>`);
@@ -27,9 +36,6 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.getElementById('toggle').click((e) => {
 			this.getElementById('checklist').toggle(400);
 			this.getElementById('lois').toggle(400);
-		});
-		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
-			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Check, (event) => {
 			event.args[0].message = event.args[0].message.replace('(', `(${this.erotion.getEnroachBonus().dice}+`);
@@ -158,19 +164,26 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	appendCharacter() {
-		this.client.addCharacter({ 
-			name: this.sheet.name,
-			HP: this.sheet.subStatus.HP,
-			'侵蝕率': this.sheet.subStatus.erotion,
-			'財産ポイント': this.sheet.subStatus.property,
-			'ロイス': this.sheet.lois.filter((lois) => {
-				return !(lois.titus || lois.type === 'Dロイス');
-			}).length
+		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
+			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
-		this.fireEvent({
-			type: io.github.shunshun94.HiyokoCross.Application.EVENTS.AppendCharacterEvent,
-			character: this.sheet
+		const characterManager = new io.github.shunshun94.trpg.CharacterManager(this.$html, {
+			sheetHandler: {
+				getSheet: (dummy, sheet) => {return new Promise(function(resolve, reject) {resolve(sheet)});}
+			},
+			sheetConverter: (sheet) => {
+				return { 
+					name: this.sheet.name,
+					HP: this.sheet.subStatus.HP,
+					'侵蝕率': this.sheet.subStatus.erotion,
+					'財産ポイント': this.sheet.subStatus.property,
+					'ロイス': this.sheet.lois.filter((lois) => {
+						return !(lois.titus || lois.type === 'Dロイス');
+					}).length
+				};
+			}
 		});
+		return characterManager.appendCharacters(this.sheet);
 	}
 };
 
@@ -183,7 +196,7 @@ io.github.shunshun94.HiyokoCross.Application.EVENTS = {
 
 io.github.shunshun94.HiyokoCross.ErotionManage = io.github.shunshun94.HiyokoCross.ErotionManage || class {
 	constructor(dummy, sheet){
-		this.erotion = sheet.subStatus.erotion;
+		this.setCurrentEnroach(sheet['侵蝕率'] || sheet.subStatus.erotion);
 		this.erotionEffects = [
 			{border: 60, dice:0, effect:0, original: 0},
 			{border: 80, dice:1, effect:0, original: 0},
@@ -201,6 +214,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = io.github.shunshun94.HiyokoCros
 	}
 	setCurrentEnroach(val) {
 		this.erotion = val;
+		console.log(this.erotion);
 	}
 	getCurrentEnroach() {
 		return this.erotion;
