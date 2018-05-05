@@ -66,7 +66,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 				this.erotion.updateLoisCount(event.args['ロイス'])
 			}, (err)=>{
 				console.error(err);
-				alert(`イニシアティブ表の更新に失敗しました\n理由: ${err.result || err}`);
+				alert(`イニシアティブ表の更新に失敗しました\n理由: ${err.result}`);
 			});
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost, (event) => {
