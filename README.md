@@ -1,11 +1,11 @@
-# HiyokoCross
+# D. Crescent
 
 ## どんなツール
 
-オンセにおけるダブルクロス the 3rd Edition ([公式ページ](http://www.fear.co.jp/dbx3rd/)) の進行をスムーズにするツール。
-*これから作る。まだ使えるわけではない。*
+D. Crescent は オンセにおけるダブルクロス the 3rd Edition ([公式ページ](http://www.fear.co.jp/dbx3rd/)) のセッションテンポを向上させたい GM/プレイヤー 向けの PC 管理用ツール。   
+ユーザはスムーズな判定や情報共有を実現でき、チャットパレットに比較して他プレイヤーとの情報共有や修正値の管理の面で強力である。
 
-[つけたい機能一覧](./docs/FunctionList.md)
+(という目標を実現するために [つけたい機能一覧](./docs/FunctionList.md))
 
 ### プレ公開
 
@@ -52,10 +52,11 @@ MIT ライセンスです。
 * [キャラクターシート倉庫](https://character-sheets.appspot.com/dx3/)
 
 本アプリはどちらで作ったキャラクターシートにも対応する。
+[キャラクターシート入力のコツ](./docs/characterSheet.md)も参照すること。
 
 ### オンセ会場
 
-以下のオンセプラットフォームに対応させる予定。
+以下のオンセプラットフォームに対応させる。
 どちらかで部屋を用意すること。ただし、Discord の場合、部屋とは別に bot を作成する必要がある。
 
 * どどんとふ
@@ -72,4 +73,4 @@ Discord で Bot を用意するには以下の手順を踏む必要がある。
 5. 画面上部の APP DETAILS のところに書かれた Client ID の数字をメモする
 6. 次の URL にアクセスする `https://discordapp.com/oauth2/authorize?client_id=[Client Id の数字]&scope=bot&permissions=0`
 
-
+Discord の bot に関する公式の情報は [Discord - Developer Documentation TOPICS ＞ OAuth2 ＞ Bots](https://discordapp.com/developers/docs/topics/oauth2#bots) から確認できる。
