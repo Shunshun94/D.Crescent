@@ -24,7 +24,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 			{border:999, dice:7, effect:3, original: 4}
 		];
 		this.isOriginal = sheet.lois.filter((lois) => {
-			return lois.name.indexOf('起源種') > -1;
+			return (lois.name || '').indexOf('起源種') > -1;
 		}).length;
 		this.buildComponents();
 		this.bindEvents();
@@ -70,15 +70,15 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		this.getElementById('impulse').click((e) => {this.throwImpulse();});
 		this.getElementById('geneshift-exec').click((e) => {this.throwGeneshift();});
 	}
-	
+
 	buildComponents() {
 		const base1 = $(`<div></div>`);
 		base1.append(`<span>侵蝕率：<input type="number" id="${this.id}-value"/> / ロイス残数： <span id="${this.id}-lois"></span></span><br/>`);
-		base1.append(`<span>侵蝕率ボーナス：<span id="${this.id}-bonus"></span></span>`);
+		base1.append(`<span><span id="${this.id}-bonus"></span></span>`);
 		this.$html.append(base1);
 		this.updateLoisCount()
 		this.setCurrentEnroach(this.sheet['侵蝕率'] || this.sheet.subStatus.erotion);
-		
+
 		const base2 = $(`<div></div>`);
 		let max = 1;
 		for(var key in this.sheet.status) {
@@ -91,13 +91,14 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		base2.append(`<span id="${this.id}-geneshift">ジェネシフト： <input type="number" value="1" min="1" max="${max}" id="${this.id}-geneshift-value"/><button id="${this.id}-geneshift-exec">ジェネシフトする</button></span>`);
 		this.$html.append(base2);
 	}
-	
+
 	setCurrentBonus(opt_bonus) {
 		const bonus = opt_bonus || this.getEnroachBonus();
 		if(this.isOriginal) {
 			this.getElementById('bonus').text(` (起源種) エフェクトレベル ＋${bonus.original}`);
 		} else {
-			this.getElementById('bonus').text(` エフェクトレベル ＋${bonus.effect} / ダイスボーナス ＋${bonus.dice}`);
+			this.getElementById('bonus').empty();
+			this.getElementById('bonus').append(` エフェクトレベル ＋${bonus.effect}<br/> ダイスボーナス ＋${bonus.dice}`);
 		}
 	}
 
