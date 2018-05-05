@@ -65,8 +65,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			this.client.updateCharacter(event.args).then((ok)=>{
 				this.erotion.updateLoisCount(event.args['ロイス'])
 			}, (err)=>{
-				console.error(err);
-				alert(`イニシアティブ表の更新に失敗しました\n理由: ${err.result}`);
+				this.initiativeTableUpdateFailer(err);
 			});
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost, (event) => {
@@ -87,6 +86,24 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 				this.client.sendChat({
 					name: this.sheet.name,
 					message: `侵蝕率修正： ${event.value}`
+				});
+			}, (err) => {
+				this.initiativeTableUpdateFailer(err);
+			});
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.RESURRECT_REQUEST, (event) => {
+			this.sendChatAsyn({
+				name: this.sheet.name,
+				message: `${this.erotion.getCurrentEnroach()}+1d10 | リザレクト`
+			}).then((result) => {
+				this.client.updateCharacter({
+					targetName: this.sheet.name,
+					'侵蝕率': result,
+					'HP': result - Number(this.erotion.getCurrentEnroach())
+				}).then((updateResult) => {
+					this.erotion.setCurrentEnroach(result);
+				}, (failed) => {
+					this.initiativeTableUpdateFailer(failed);
 				});
 			});
 		});
@@ -219,6 +236,11 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			}
 		});
 		return characterManager.appendCharacters(this.sheet);
+	}
+	
+	initiativeTableUpdateFailer(err) {
+		console.error(err);
+		alert(`イニシアティブ表の更新に失敗しました\n理由: ${err.result}`);
 	}
 };
 

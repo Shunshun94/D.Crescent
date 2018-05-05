@@ -37,6 +37,18 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		})
 	}
 
+	throwResurrect() {
+		if(Number(this.getElementById('value').val()) > 99) {
+			alert('侵蝕率100未満の時しかリザレクトはできません');
+			return;
+		}
+		if(confirm('リザレクトします。侵蝕率が上昇、HPもリザレクトの結果と同じ値となります。よろしいですか?')) {
+			this.fireEvent({
+				type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.RESURRECT_REQUEST
+			});
+		}
+	}
+
 	throwEntry() {
 		if(confirm('シーン登場します。よろしいですか?')) {
 			this.fireEvent({
@@ -66,6 +78,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 
 	bindEvents() {
 		this.getElementById('value').change((e) => {this.updateValue();});
+		this.getElementById('resurrect').click((e) => {this.throwResurrect();})
 		this.getElementById('entry').click((e) => {this.throwEntry();});
 		this.getElementById('impulse').click((e) => {this.throwImpulse();});
 		this.getElementById('geneshift-exec').click((e) => {this.throwGeneshift();});
@@ -85,6 +98,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 			max = (max < statusValue) ? statusValue : max;
 		}
 
+		base1.append(`<button id="${this.id}-resurrect">リザレクトする</button>　　`);
 		base1.append(`<button id="${this.id}-entry">シーン登場する</button><hr/>`);
 		base1.append(`<button id="${this.id}-impulse">衝動判定による侵蝕率上昇</button><hr/>`)
 		base1.append(`<span id="${this.id}-geneshift">ジェネシフトで振るダイス数： <input type="number" value="1" min="1" max="${max}" id="${this.id}-geneshift-value"/><br/><button id="${this.id}-geneshift-exec">ジェネシフトする</button></span>`);
@@ -100,7 +114,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 	setCurrentBonus(opt_bonus) {
 		const bonus = opt_bonus || this.getEnroachBonus();
 		if(this.isOriginal) {
-			this.getElementById('bonus').text(` (起源種) エフェクトレベル ＋${bonus.original}`);
+			this.getElementById('bonus').text(` (起源種) エフェクトレベル ＋${bonus.effect}`);
 		} else {
 			this.getElementById('bonus').empty();
 			this.getElementById('bonus').append(` エフェクトレベル ＋${bonus.effect}<br/> ダイスボーナス ＋${bonus.dice}`);
@@ -119,10 +133,12 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		const cands = this.erotionEffects.filter((effect) => {
 			return effect.border >erotion;
 		});
-		if(cands.length) {
-			return cands[0];
+		let resultCand = (cands.length) ? cands[0] : {dice:7, effect:3, original: 4};
+			
+		if(this.isOriginal) {
+			return {dice: 0, effect: resultCand.original};
 		} else {
-			return {dice:7, effect:3, original: 4};
+			return resultCand;
 		}
 	}
 	updateLoisCount(opt_count) {
@@ -134,5 +150,6 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 
 io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS = {
 	UPDATE_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-UPDATE_EROTION_VALUE',
-	ADD_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-ADD_EROTION_VALUE'
+	ADD_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-ADD_EROTION_VALUE',
+	RESURRECT_REQUEST: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-RESURRECT_REQUEST'
 };
