@@ -40,7 +40,6 @@ io.github.shunshun94.HiyokoCross.ErotionManage.BackTrack = class extends com.hiy
 	}
 	
 	appendTableLine(loisCount, bonus) {
-		console.log(loisCount, bonus)
 		const sd = [
 			Math.sqrt(io.github.shunshun94.HiyokoCross.ErotionManage.BackTrack.variance * (loisCount     + bonus)),
 			Math.sqrt(io.github.shunshun94.HiyokoCross.ErotionManage.BackTrack.variance * (loisCount * 2 + bonus)),
