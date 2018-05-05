@@ -69,27 +69,32 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		this.getElementById('entry').click((e) => {this.throwEntry();});
 		this.getElementById('impulse').click((e) => {this.throwImpulse();});
 		this.getElementById('geneshift-exec').click((e) => {this.throwGeneshift();});
+		this.getElementById('toggle').click((e) => {
+			this.$html.find('div').toggle(400);
+		});
 	}
 
 	buildComponents() {
-		const base1 = $(`<div></div>`);
-		base1.append(`<span>侵蝕率：<input type="number" id="${this.id}-value"/> / ロイス残数： <span id="${this.id}-lois"></span></span><br/>`);
-		base1.append(`<span><span id="${this.id}-bonus"></span></span>`);
-		this.$html.append(base1);
-		this.updateLoisCount()
-		this.setCurrentEnroach(this.sheet['侵蝕率'] || this.sheet.subStatus.erotion);
-
-		const base2 = $(`<div></div>`);
+		this.$html.append(`<button id="${this.id}-toggle">侵蝕率管理開閉</button>`);
+		const base1 = $(`<div id="${this.id}-left"></div>`);
+		base1.append(`<span>侵蝕率：<input type="number" id="${this.id}-value"/> / ロイス残： <span id="${this.id}-lois"></span></span><br/>`);
+		base1.append(`<span><span id="${this.id}-bonus"></span></span><hr/>`);
 		let max = 1;
 		for(var key in this.sheet.status) {
 			const statusValue = Number(this.sheet.status[key]);
 			max = (max < statusValue) ? statusValue : max;
 		}
 
-		base2.append(`<button id="${this.id}-entry">シーン登場する</button><br/>`);
-		base2.append(`<button id="${this.id}-impulse">衝動判定による侵蝕率上昇</button><br/>`)
-		base2.append(`<span id="${this.id}-geneshift">ジェネシフト： <input type="number" value="1" min="1" max="${max}" id="${this.id}-geneshift-value"/><button id="${this.id}-geneshift-exec">ジェネシフトする</button></span>`);
-		this.$html.append(base2);
+		base1.append(`<button id="${this.id}-entry">シーン登場する</button><hr/>`);
+		base1.append(`<button id="${this.id}-impulse">衝動判定による侵蝕率上昇</button><hr/>`)
+		base1.append(`<span id="${this.id}-geneshift">ジェネシフトで振るダイス数： <input type="number" value="1" min="1" max="${max}" id="${this.id}-geneshift-value"/><br/><button id="${this.id}-geneshift-exec">ジェネシフトする</button></span>`);
+		this.$html.append(base1);
+
+		this.$html.append(`<div id="${this.id}-backTrack"></div>`);
+		this.backTrack = new io.github.shunshun94.HiyokoCross.ErotionManage.BackTrack(this.getElementById('backTrack'), this.sheet);
+
+		this.updateLoisCount()
+		this.setCurrentEnroach(this.sheet['侵蝕率'] || this.sheet.subStatus.erotion);
 	}
 
 	setCurrentBonus(opt_bonus) {
@@ -123,6 +128,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 	updateLoisCount(opt_count) {
 		this.loisCount = opt_count || this.loisCount;
 		this.getElementById('lois').text(this.loisCount);
+		this.backTrack.update(this.loisCount);
 	}
 };
 

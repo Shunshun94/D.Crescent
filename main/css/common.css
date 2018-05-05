@@ -20,19 +20,35 @@
 #io-github-shunshun94-HiyokoCross-erotion {
 	border-bottom: 2px solid #b80b86;
 	margin-bottom:4px;
+	position:relative;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion-toggle {
+	position:absolute;
+	top: 8px;
+	right: 4px;
 }
 
 #io-github-shunshun94-HiyokoCross-erotion-value,
-#io-github-shunshun94-HiyokoCross-erotion-geneshift-value
+#io-github-shunshun94-HiyokoCross-erotion-geneshift-value,
+#io-github-shunshun94-HiyokoCross-erotion-backTrack-bonus
  {
 	width: 40px;
 }
 
-#io-github-shunshun94-HiyokoCross-erotion > div {
-	display: inline-block;
+#io-github-shunshun94-HiyokoCross-erotion {
+	display: flex;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion-left {
 	padding: 4px;
 	text-align:right;
 	border-right: 3px double #b80b86;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion-backTrack {
+	padding: 4px;
+	text-align:left;
 }
 
 footer {
