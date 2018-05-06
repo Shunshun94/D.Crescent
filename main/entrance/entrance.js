@@ -10,17 +10,28 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		this.bindEvents();
 	}
 	
+	getSheetId() {
+		return this.getElementById('sheet-input').val().replace('=', '%EQUAL%');
+	}
+	
 	buildTofUrl(e) {
-		document.location = `./dcrescent.html?sheet=${this.getElementById('sheet-input').val()}&url=${e.value.url}&room=${e.value.room.no}&pass=${e.value.password.password}`;
+		document.location = `./dcrescent.html?sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room.no}&pass=${e.value.password.password}`;
 	}
 	buildDiscordUrl(e) {
-		document.location = `./dcrescent.html?sheet=${this.getElementById('sheet-input').val()}&url=${e.value.url}&room=${e.value.room}&dicebot=${e.value.dicebot}`
+		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room}&dicebot=${e.value.dicebot}`
 	}
 	buildDummyUrl(e) {
-		document.location = `./dcrescent.html?sheet=${this.getElementById('sheet-input').val()}`;
+		document.location = `./dcrescent.html?sheet=${this.getSheetId()}`;
 	}
 	
 	bindEvents() {
+		this.getElementById('sheet-input').change((e) => {
+			if(this.getElementById('sheet-input').val()) {
+				this.getElementById('sheet > button').show();
+			} else {
+				this.getElementById('sheet > button').hide();
+			}
+		});
 		this.getElementById('sheet-tof').click((e) => {
 			this.getElementById('init').show();
 			this.getElementById('tof').show(com.hiyoko.component.InputFlow.Child.SPEED);
@@ -81,6 +92,7 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		this.getElementById('tof-url-FreeInput').hide();
 		this.getElementById('tof').hide();
 		this.getElementById('discord').hide();
+		this.getElementById('sheet > button').hide();
 		com.hiyoko.util.forEachMap(JSON.parse(localStorage.getItem('com-hiyoko-sample-dx3sheetparse-index') || '{}'), (v, k) => {
 			$(`#${this.id}-sheet-list`).append(`<option value="${k}">${v}</option>`);
 		});

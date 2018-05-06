@@ -20,14 +20,7 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 	updateInitiativeTable() {
 		const data = this.getData();
 		this.fireEvent({
-			type: 'tofRoomRequest',
-			method: 'updateCharacter',
-			args: [{
-				targetName: this.sheet.name,
-				'ロイス': data.lois.filter((lois) => {
-					return !(lois.titus || lois.type === 'Dロイス');
-				}).length
-			}]
+			type: io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST
 		});
 	}
 
@@ -71,23 +64,23 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 			const loises = this.getData().lois;
 			const dLois = loises.filter((lois) => {
 				return lois.type === 'Dロイス';
-			}).map((lois) => {return lois.name});
+			}).map((lois) => {return `　　${lois.name}`});
 			const titus = loises.filter((lois) => {
 				return lois.titus;
 			}).map((lois) => {
 				if(lois.used) {
-					return lois.name + ' (昇華済)';
+					return `　　${lois.name}(昇華済)`;
 				} else {
-					return lois.name;
+					return `　　${lois.name}`;
 				}
 			});
 			const normalLois = loises.filter((lois) => {
 				return (! Boolean(lois.titus)) && lois.type !== 'Dロイス'
 			}).map((lois) => {  
 				if(lois.isSLois) {
-					return lois.name + ' (Sロイス)';
+					return `　　${lois.name} (Sロイス)`;
 				} else {
-					return lois.name;
+					return `　　${lois.name}`;
 				}
 			});
 			
@@ -117,16 +110,19 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 		});
 		
 		this.$html.on(io.github.shunshun94.HiyokoCross.LoisList.EVENTS.SEND_MESSAGE, (e) => {
-			e.name = this.sheet.name;
 			this.fireEvent({
-				type: 'tofRoomRequest',
-				method: 'sendChat',
-				args: [e]
+				type: io.github.shunshun94.HiyokoCross.Lois.SEND_MESSAGE_REQUEST,
+				message: e.message
 			});
 		});
 
 		this.$html.on(io.github.shunshun94.HiyokoCross.LoisList.EVENTS.UPDATE_REQUEST, (e) => {
 			this.updateInitiativeTable(e);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.LoisList.EVENTS.UPDATE_LOIS_STORAGE, (e) => {
+			this.fireEvent({
+				type: io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_STORAGE
+			});
 		});
 		
 		this.$html.on('getStorage', (e) => {
@@ -137,3 +133,8 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 		});
 	}
 };
+
+io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST = 'io-github-shunshun94-HiyokoCross-Lois-UPDATE_LOIS_REQUEST';
+io.github.shunshun94.HiyokoCross.Lois.SEND_MESSAGE_REQUEST = 'io-github-shunshun94-HiyokoCross-Lois-SEND_MESSAGE_REQUEST';
+io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE = 'io-github-shunshun94-HiyokoCross-Lois-KEEP_STORE';
+io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_STORAGE = 'io-github-shunshun94-HiyokoCross-Lois-UPDATE_LOIS_STORAGE';

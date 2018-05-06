@@ -45,7 +45,7 @@ io.github.shunshun94.HiyokoCross.CheckDto = class {
 	}
 	
 	getCheckChat() {
-		return 	`(${this.dice})DX+(${this.hit})@(${this.critical})` +
+		return 	`(${this.dice})DX+${this.hit}@(${this.critical})` +
 				` ${this.name} ${this.text ? '|' : ''} ${this.text}\n${this.notes}`;
 	}
 
@@ -65,7 +65,7 @@ io.github.shunshun94.HiyokoCross.CheckDto = class {
 	getAttackEvent(value, name = '', eventType = io.github.shunshun94.HiyokoCross.CheckDto.EVENTS.AttackEvent) {
 		if(Number(value)) {
 			const dices = 1 + Math.floor(Number(value) / 10);
-			const message = `${dices}d10+${value} ${this.name} ${this.text ? '|' : ''} ${this.text}\n${this.notes}`;
+			const message = `${dices}d10+${this.attack} ${this.name} ${this.text ? '|' : ''} ${this.text}\n${this.notes}`;
 			return {
 				type: eventType,
 				method: 'sendChat',
@@ -108,9 +108,9 @@ io.github.shunshun94.HiyokoCross.CheckDto = class {
 			}
 		} else {
 			if(currentValue) {
-				text = `C(${currentValue}+${this.cost}) ${this.name} | 侵蝕率上昇`;
+				text = `${currentValue}+${this.cost}+1d1-1 ${this.name} | 侵蝕率上昇`;
 			} else {
-				text = `C(${this.cost}) ${this.name} | 侵蝕率上昇`;
+				text = `${this.cost}+1d1-1 ${this.name} | 侵蝕率上昇`;
 			}
 		}
 		if(/[1-9]/.exec(text)) {

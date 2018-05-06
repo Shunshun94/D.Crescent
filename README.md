@@ -40,6 +40,14 @@ MIT ライセンスです。
 
 ライセンス情報:  https://jquery.org/license/
 
+#### discord.io
+
+Copyright (c) 2015 izy521
+
+MIT ライセンスです。
+
+ライセンス情報:  https://github.com/izy521/discord.io/blob/master/LICENSE
+
 ## どうやって使うの
 
 以下の2つを事前準備する。

@@ -8,22 +8,55 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.client = opts.client || new io.github.shunshun94.trpg.dummy.Room($(`#${this.id}-log`));
 		this.sheet = sheet;
 		this.max = 0;
-		this.appendCharacter();
-		this.buildComponents(opts);
-		this.bindEvents();
+		this.appendCharacter().then((sheets) => {
+			this.sheet = sheets[0];
+			this.buildComponents(opts);
+			this.bindEvents();
+		}, (err) => {
+			console.error(err);
+			alert(`キャラクターシートの連携に失敗しました。\n理由: ${err.result || err}\nリロードするか、前の画面に戻ってやりなおすか、ないしは開発者 Twitter にこのエラーメッセージのスクショを送ってください `);
+		});
 	}
 
 	buildComponents() {
+		this.$html.append(`<h1 id="${this.id}-header"></h1>`);
+		this.client.getRoomInfo().then((result) => {
+			this.getElementById('header').append(`<span id="${this.id}-header-name">${this.sheet.name}</span> @ <span id="${this.id}-header-room">${result.roomName}</span> - DCrescent`);
+		});
+		this.$html.append(`<div id="${this.id}-erotion"></div>`);
+		this.erotion = new io.github.shunshun94.HiyokoCross.ErotionManage(this.getElementById('erotion'), this.sheet);
+		this.$html.append(`<button id="${this.id}-toggle">判定 / ロイス切り替え</button>`);
 		this.$html.append(`<div id="${this.id}-checklist"></div>`);
 		this.checkList = new io.github.shunshun94.HiyokoCross.CheckList(this.getElementById('checklist'), this.sheet);
 		this.$html.append(`<div id="${this.id}-lois"></div>`);
-		this.$html.append(`<div id="${this.id}-erotion"></div>`);
-		this.erotion = new io.github.shunshun94.HiyokoCross.ErotionManage(this.getElementById('erotion'), this.sheet);
+		this.loisList = new io.github.shunshun94.HiyokoCross.Lois(this.getElementById('lois'), this.sheet);
+	}
+
+	updateCost(event) {
+		if(/[1-9]/.exec(event.cost)) {
+			const text = (String(event.cost).indexOf('d10') > -1) ?
+					`${this.erotion.getCurrentEnroach()}+${event.cost} | 侵蝕率上昇` :
+					`${this.erotion.getCurrentEnroach()}+${event.cost}+1d1-1 | 侵蝕率上昇`;
+			this.sendChatAsyn({message: text}).then((result) => {
+				this.erotion.setCurrentEnroach(result);
+				this.client.updateCharacter({
+					targetName: this.sheet.name,
+					'侵蝕率': result
+				});
+				((event.resolve) || (console.log))(result);
+			}, (event.reject) || (console.log));
+		}
+	}
+
+	updateLoisStorage() {
+		const loisList = this.loisList.getData();
+		com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name, loisList);
 	}
 
 	bindEvents() {
-		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
-			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
+		this.getElementById('toggle').click((e) => {
+			this.getElementById('checklist').toggle(400);
+			this.getElementById('lois').toggle(400);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Check, (event) => {
 			event.args[0].message = event.args[0].message.replace('(', `(${this.erotion.getEnroachBonus().dice}+`);
@@ -32,23 +65,68 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 				((event.resolve) || (console.log))(result);
 			}, (event.reject) || (console.log));
 		});
-		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost, (event) => {
-			if(/[1-9]/.exec(event.cost)) {
-				const text = (String(event.cost).indexOf('d10') > -1) ?
-						`${this.erotion.getCurrentEnroach()}+${event.cost} | 侵蝕率上昇` :
-						`C(${this.erotion.getCurrentEnroach()}+${event.cost}) | 侵蝕率上昇`;
-				this.sendChatAsyn({message: text}).then((result) => {
-					this.erotion.setCurrentEnroach(result);
-					this.client.updateCharacter({
+		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST, (event) => {
+			const loisList = this.loisList.getData();
+			const loisCount = loisList.lois.filter((lois) => {
+				return !(lois.titus || lois.type === 'Dロイス');
+			}).length;
+			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name, loisList);
+			this.client.updateCharacter({
 						targetName: this.sheet.name,
-						'侵蝕率': result
-					});
-					((event.resolve) || (console.log))(result);
-				}, (event.reject) || (console.log));
-			}
+						'ロイス': loisCount
+					}).then((ok)=>{
+				this.erotion.updateLoisCount(loisCount)
+			}, (err)=>{
+				this.initiativeTableUpdateFailer(err);
+			});
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_STORAGE, (event) => {
+			this.updateLoisStorage(event);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost, (event) => {
+			this.updateCost(event);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Attack, (event) => {
 			this.client.sendChat(event.args[0]);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.SEND_MESSAGE_REQUEST, (event) => {
+			this.client.sendChat({
+				name: this.sheet.name,
+				message: event.message
+			});
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.ADD_EROTION_VALUE, (event) => {
+			this.updateCost(event);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_EROTION_VALUE, (event) => {
+			this.erotion.setCurrentEnroach(event.value);
+			this.client.updateCharacter({
+				targetName: this.sheet.name,
+				'侵蝕率': event.value
+			}).then((dummy) => {
+				this.client.sendChat({
+					name: this.sheet.name,
+					message: `侵蝕率修正： ${event.value}`
+				});
+			}, (err) => {
+				this.initiativeTableUpdateFailer(err);
+			});
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.RESURRECT_REQUEST, (event) => {
+			this.sendChatAsyn({
+				name: this.sheet.name,
+				message: `${this.erotion.getCurrentEnroach()}+1d10 | リザレクト`
+			}).then((result) => {
+				this.client.updateCharacter({
+					targetName: this.sheet.name,
+					'侵蝕率': result,
+					'HP': result - Number(this.erotion.getCurrentEnroach())
+				}).then((updateResult) => {
+					this.erotion.setCurrentEnroach(result);
+				}, (failed) => {
+					this.initiativeTableUpdateFailer(failed);
+				});
+			});
 		});
 	}
 
@@ -70,6 +148,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			}
 			const key = io.github.shunshun94.HiyokoCross.CheckList.generateRndString();
 			params.message += ` ${key}`;
+			params.bot = 'DoubleCross';
 			const getChatEvent = this.getAsyncEvent(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, {
 				method: 'getChat'
 			}).done((result) => {
@@ -77,7 +156,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 					return msg[1].message.indexOf(key) > -1;
 				});
 				if(sendMessage.length) {
-					const regexpResult = io.github.shunshun94.HiyokoCross.CheckList.CHECK_RESULT_REGEXP.exec(sendMessage[0][1].message);
+					const regexpResult = io.github.shunshun94.HiyokoCross.CheckList.CHECK_RESULT_REGEXP.exec(com.hiyoko.DodontoF.V2.fixChatMsg(sendMessage[0]).msg);
 					if(regexpResult) {
 						resolve(Number(regexpResult[1]));
 					} else {
@@ -151,19 +230,38 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	appendCharacter() {
-		this.client.addCharacter({
-			name: this.sheet.name,
-			HP: this.sheet.subStatus.HP,
-			'侵蝕率': this.sheet.subStatus.erotion,
-			'財産ポイント': this.sheet.subStatus.property,
-			'ロイス': this.sheet.lois.filter((lois) => {
-				return !(lois.titus || lois.type === 'Dロイス');
-			}).length
+		const saveLoisMemoryData = com.hiyoko.util.getLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name);
+		if(saveLoisMemoryData && window.confirm('前回プレイしたときのロイス情報が残っています。読み込みますか?')) {
+			for(var key in saveLoisMemoryData) {
+				this.sheet[key] = saveLoisMemoryData[key];
+			}
+		}
+		
+		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
+			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
-		this.fireEvent({
-			type: io.github.shunshun94.HiyokoCross.Application.EVENTS.AppendCharacterEvent,
-			character: this.sheet
+		const characterManager = new io.github.shunshun94.trpg.CharacterManager(this.$html, {
+			sheetHandler: {
+				getSheet: (dummy, sheet) => {return new Promise(function(resolve, reject) {resolve(sheet)});}
+			},
+			sheetConverter: (sheet) => {
+				return { 
+					name: this.sheet.name,
+					HP: this.sheet.subStatus.HP,
+					'侵蝕率': this.sheet.subStatus.erotion,
+					'財産ポイント': this.sheet.subStatus.property,
+					'ロイス': this.sheet.lois.filter((lois) => {
+						return !(lois.titus || lois.type === 'Dロイス');
+					}).length
+				};
+			}
 		});
+		return characterManager.appendCharacters(this.sheet);
+	}
+	
+	initiativeTableUpdateFailer(err) {
+		console.error(err);
+		alert(`イニシアティブ表の更新に失敗しました\n理由: ${err.result}`);
 	}
 };
 
@@ -176,7 +274,7 @@ io.github.shunshun94.HiyokoCross.Application.EVENTS = {
 
 io.github.shunshun94.HiyokoCross.ErotionManage = io.github.shunshun94.HiyokoCross.ErotionManage || class {
 	constructor(dummy, sheet){
-		this.erotion = sheet.subStatus.erotion;
+		this.setCurrentEnroach(sheet['侵蝕率'] || sheet.subStatus.erotion);
 		this.erotionEffects = [
 			{border: 60, dice:0, effect:0, original: 0},
 			{border: 80, dice:1, effect:0, original: 0},
@@ -208,6 +306,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = io.github.shunshun94.HiyokoCros
 			return {dice:7, effect:3, original: 4};
 		}
 	}
+	updateLoisCount(count) {/* NULL */}
 }
 io.github.shunshun94.HiyokoCross.CheckList = io.github.shunshun94.HiyokoCross.CheckList || class {constructor() {}};
 io.github.shunshun94.HiyokoCross.Lois = io.github.shunshun94.HiyokoCross.Lois || class {constructor() {}};

@@ -1,0 +1,83 @@
+@charset "UTF-8";
+
+#io-github-shunshun94-HiyokoCross-checklist {
+	magrin: 32px;
+}
+
+#io-github-shunshun94-HiyokoCross-checklist-attack {
+	background-color:#DDDDDD;
+  width: 400px;
+  position: absolute;
+  right: 4px;
+  padding: 4px;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-check {
+	border: 3px inset #DDDDDD;
+	background-color: #EEEEFF;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-check-header {
+	margin: 4px;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-check-skill {
+	margin-left: 16px;
+	padding: 4px;
+	display:none;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-check-border {
+	margin:0px;
+	margin-left:16px;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-check-skill {
+	background-color: #E0E0FF;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-check-combo-combo-spec,
+.io-github-shunshun94-HiyokoCross-checklist-check-combo-combo-note,
+.io-github-shunshun94-HiyokoCross-checklist-check-effect-effect-spec,
+.io-github-shunshun94-HiyokoCross-checklist-check-effect-effect-note {
+	margin-left: 16px;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-check-combo-combo-spec,
+.io-github-shunshun94-HiyokoCross-checklist-check-effect-effect-spec {
+	border-bottom: 2px #DDDDDD solid;
+}
+
+#io-github-shunshun94-HiyokoCross-checklist-check-effect-exec {
+	display:none;
+}
+
+#io-github-shunshun94-HiyokoCross-checklist-options-table {
+	display: none;
+	margin-left: 16px;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-options-table-header-0,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-member-0 {
+	width: 12px;
+}
+
+.io-github-shunshun94-HiyokoCross-checklist-options-table-header-2,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-member-2,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-header-3,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-member-3,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-header-4,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-member-4,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-header-5,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-member-5,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-header-6,
+.io-github-shunshun94-HiyokoCross-checklist-options-table-member-6 {
+	width: 48px;
+}
+.com-hiyoko-component-table-base-member-number {
+	width: 46px;
+}
+.com-hiyoko-component-table-base-member-text {
+	width:98%;
+}
+

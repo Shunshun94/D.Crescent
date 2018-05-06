@@ -2,9 +2,82 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>DCrescent</title>
+<link rel="stylesheet" href="./css/common.css" type="text/css" />
+<link rel="stylesheet" href="./css/dice.css" type="text/css" />
+<link rel="stylesheet" href="./css/lois.css" type="text/css" />
 </head>
 <body>
+<div id="io-github-shunshun94-Dummy"></div>
+<div id="io-github-shunshun94-HiyokoCross"></div>
+<footer>
+<p id="version"></p>
+<p><a href="https://twitter.com/Shunshun94">作者 Twitter</a> | <a href="https://github.com/Shunshun94/HiyokoCross">GitHub</a> | <a href="https://github.com/Shunshun94/HiyokoCross/releases">History</a> | <a href="http://amzn.asia/8mNqdKy">ひよこの欲しい物リスト</a></p>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://shunshun94.github.io/shared/external/discord.io/index.js"></script>
+<script src='https://shunshun94.github.io/shared/jquery/com/hiyoko/util/v2/utils.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/util/v2/utils.js"></script>
 
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/bcdice-api/BCDice-API.js"></script> 
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/vampireblood/client.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/vampireblood/dx3.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/characterSheetsMasashige/client.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/characterSheetsMasashige/dx3.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/clientSelector.js"></script>
+
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/components/v1/ApplicationBase.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/components/v1/TableBase.js"></script>
+<script src="https://shunshun94.github.io/shared/other/io/github/shunshun94/trpg/characterManager.js"></script>
+
+<script src="https://shunshun94.github.io/shared/other/io/github/shunshun94/trpg/clientSpec.js"></script>
+<script src="https://shunshun94.github.io/shared/other/io/github/shunshun94/trpg/discord/client.js"></script>
+<script src="https://shunshun94.github.io/shared/jquery/io/github/shunshun94/trpg/dummy/client.js"></script>
+<script src='https://shunshun94.github.io/shared/jquery/com/hiyoko/dodontof/v2/DodontoF-Client.js'></script>
+<script src="https://shunshun94.github.io/shared/jquery/com/hiyoko/dodontof/v2/DodontoF-chatUtil.js"></script>
+<script src="https://shunshun94.github.io/shared/other/io/github/shunshun94/trpg/clientFactory.js"></script>
+
+<script src="./check/checkDto.js"></script>
+<script src="./check/skillCheck.js"></script>
+<script src="./check/comboCheck.js"></script>
+<script src="./check/effectCheck.js"></script>
+<script src="./check/checkOptionTable.js"></script>
+<script src="./check/attack.js"></script>
+<script src="./check/checkList.js"></script>
+<script src="./lois/loisList.js"></script>
+<script src="./lois/lois.js"></script>
+<script src="./erotion/erotionManage.js"></script>
+<script src="./erotion/BackTrack.js"></script>
+<script src="./Application.js"></script>
+
+<script>
+const query = com.hiyoko.util.getQueries();
+try {
+	io.github.shunshun94.trpg.selectClient(query.sheet).DX3.getSheet(query.sheet).done((sheet) => {
+			com.hiyoko.util.updateLocalStorage('com-hiyoko-sample-dx3sheetparse-index', query.sheet.replace('%EQUAL%', '='), sheet.name);
+			if(! Boolean(query.url || query.token)) {
+				query.url = $('#io-github-shunshun94-Dummy');
+				$('#io-github-shunshun94-Dummy').css({
+					height: '150px', overflow: 'scroll', padding: '4px', display:'block'
+				});
+			}
+			const client = io.github.shunshun94.trpg.RoomClientFactory(query);
+			// discord の初期ロード待ち
+			setTimeout(()=>{
+				new io.github.shunshun94.HiyokoCross.Application($('#io-github-shunshun94-HiyokoCross'), sheet, {client: client});
+			}, 1500);
+	}, (error) => {
+		
+	});	
+} catch(e) {
+	console.error(e, query, location.search);
+	if(String(e).endsWith("'trim' of undefined")) {
+		alert('キャラクターシートが入力されていません');
+	} else {
+		alert(e);
+	}
+	document.location = './index.html';
+}</script>
 </body>
 </html>
