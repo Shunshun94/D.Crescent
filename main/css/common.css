@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+#io-github-shunshun94-Dummy {
+	display: none;
+}
+
+#io-github-shunshun94-HiyokoCross {
+	background-color: #C0C0D0;
+	padding: 8px;
+}
+
+#io-github-shunshun94-HiyokoCross-header {
+	font-size: 80%;
+}
+
+#io-github-shunshun94-HiyokoCross-header > span {
+	font-size: 120%;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion {
+	border-bottom: 2px solid #b80b86;
+	margin-bottom:4px;
+	position:relative;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion-toggle {
+	position:absolute;
+	top: 8px;
+	right: 4px;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion-value,
+#io-github-shunshun94-HiyokoCross-erotion-geneshift-value,
+#io-github-shunshun94-HiyokoCross-erotion-backTrack-bonus
+ {
+	width: 40px;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion {
+	display: flex;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion-left {
+	padding: 4px;
+	text-align:right;
+	border-right: 3px double #b80b86;
+}
+
+#io-github-shunshun94-HiyokoCross-erotion-backTrack {
+	padding: 4px;
+	text-align:left;
+}
+
+footer {
+	border-top: 2px solid #b80b86;
+	font-size: 70%;
+	background-color: #D0D0E0;
+	height:80px;
+	padding: 8px;
+}
