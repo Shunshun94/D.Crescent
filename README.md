@@ -5,7 +5,7 @@
 D. Crescent は オンセにおけるダブルクロス the 3rd Edition ([公式ページ](http://www.fear.co.jp/dbx3rd/)) のセッションテンポを向上させたい GM/プレイヤー 向けの PC 管理用ツール。   
 ユーザはスムーズな判定や情報共有を実現でき、チャットパレットに比較して他プレイヤーとの情報共有や修正値の管理の面で強力である。
 
-(という目標を実現するために [つけたい機能一覧](./docs/FunctionList.md))
+(という目標を実現するために [つける機能一覧](./docs/FunctionList.md))
 
 ### プレ公開
 
@@ -64,11 +64,23 @@ MIT ライセンスです。
 
 ### オンセ会場
 
-以下のオンセプラットフォームに対応させる。
-どちらかで部屋を用意すること。ただし、Discord の場合、部屋とは別に bot を作成する必要がある。
+以下のオンセプラットフォームに対応している。
 
 * どどんとふ
 * Discord
+
+どちらかで部屋を用意すること。
+
+また、動作を試すために、オンセプラットフォームに接続せず、ローカルだけで動かすことも可能である。
+
+#### Discord で利用する場合の注意点
+
+Discord で利用する場合、部屋とは別に以下を用意する必要がある。
+
+* bot の作成
+* BCDice-API サーバの用意
+
+##### Bot の作成
 
 Discord で Bot を用意するには以下の手順を踏む必要がある。
 以下の手順 4 で得た Token が必要となる。この Token は他の人には原則共有しないこと。
@@ -82,3 +94,8 @@ Discord で Bot を用意するには以下の手順を踏む必要がある。
 6. 次の URL にアクセスする `https://discordapp.com/oauth2/authorize?client_id=[Client Id の数字]&scope=bot&permissions=0`
 
 Discord の bot に関する公式の情報は [Discord - Developer Documentation TOPICS ＞ OAuth2 ＞ Bots](https://discordapp.com/developers/docs/topics/oauth2#bots) から確認できる。
+
+##### BCDice-API サーバの用意
+
+BCDice-API サーバは自分で用意してもかまわないし、他の人が用意した既存のものを利用してもかまわない。
+[BCDice-API サーバのリポジトリ](https://github.com/ysakasin/bcdice-api) により詳しい情報がある。
