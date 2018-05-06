@@ -292,7 +292,6 @@ io.github.shunshun94.HiyokoCross.ErotionManage = io.github.shunshun94.HiyokoCros
 	}
 	setCurrentEnroach(val) {
 		this.erotion = val;
-		console.log(this.erotion);
 	}
 	getCurrentEnroach() {
 		return this.erotion;
