@@ -58,6 +58,9 @@ try {
 			com.hiyoko.util.updateLocalStorage('com-hiyoko-sample-dx3sheetparse-index', query.sheet.replace('%EQUAL%', '='), sheet.name);
 			if(! Boolean(query.url || query.token)) {
 				query.url = $('#io-github-shunshun94-Dummy');
+				$('#io-github-shunshun94-Dummy').css({
+					height: '150px', overflow: 'scroll', padding: '4px', display:'block'
+				});
 			}
 			const client = io.github.shunshun94.trpg.RoomClientFactory(query);
 			// discord の初期ロード待ち
