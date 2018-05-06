@@ -43,11 +43,18 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 		}
 	}
 	
+	requestUpdateLoisStorage() {
+		this.fireEvent({
+			type: io.github.shunshun94.HiyokoCross.LoisList.EVENTS.UPDATE_LOIS_STORAGE
+		});
+	}
+
 	bindSharedEvent() {
 		this.getElementById('add').click(this.appendNewLois.bind(this));
 		this.getElementById('remove').remove();
 		
 		this.$html.change((e) => {
+			if(! Boolean(e)) {return;}
 			var $tr = $(e.target);
 			var num = Number($tr.attr('name'));
 			var inputValue = $tr.val();
@@ -59,6 +66,7 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 			if(this.cols[num].inputTrigger) {
 				this.cols[num].inputTrigger(inputValue, $tr);
 			}
+			this.requestUpdateLoisStorage();
 		});
 		
 		this.getElementById('body').sortable();
@@ -231,5 +239,6 @@ io.github.shunshun94.HiyokoCross.LoisList = class extends com.hiyoko.component.T
 
 io.github.shunshun94.HiyokoCross.LoisList.EVENTS = {
 		SEND_MESSAGE: 'io-github-shunshun94-HiyokoCross-LoisList-EVENTS-SEND_MESSAGE',
-		UPDATE_REQUEST: 'io-github-shunshun94-HiyokoCross-LoisList-EVENTS-UPDATE_REQUEST'
-}
+		UPDATE_REQUEST: 'io-github-shunshun94-HiyokoCross-LoisList-EVENTS-UPDATE_REQUEST',
+		UPDATE_LOIS_STORAGE: 'io-github-shunshun94-HiyokoCross-LoisList-EVENTS-UPDATE_LOIS_STORAGE'
+};

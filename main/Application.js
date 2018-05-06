@@ -48,6 +48,11 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		}
 	}
 
+	updateLoisStorage() {
+		const loisList = this.loisList.getData();
+		com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name, loisList);
+	}
+
 	bindEvents() {
 		this.getElementById('toggle').click((e) => {
 			this.getElementById('checklist').toggle(400);
@@ -61,18 +66,34 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			}, (event.reject) || (console.log));
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST, (event) => {
-			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, event.args.targetName , this.loisList.getData());
-			this.client.updateCharacter(event.args).then((ok)=>{
-				this.erotion.updateLoisCount(event.args['ロイス'])
+			const loisList = this.loisList.getData();
+			const loisCount = loisList.lois.filter((lois) => {
+				return !(lois.titus || lois.type === 'Dロイス');
+			}).length;
+			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name, loisList);
+			this.client.updateCharacter({
+						targetName: this.sheet.name,
+						'ロイス': loisCount
+					}).then((ok)=>{
+				this.erotion.updateLoisCount(loisCount)
 			}, (err)=>{
 				this.initiativeTableUpdateFailer(err);
 			});
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_STORAGE, (event) => {
+			this.updateLoisStorage(event);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Cost, (event) => {
 			this.updateCost(event);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Attack, (event) => {
 			this.client.sendChat(event.args[0]);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.SEND_MESSAGE_REQUEST, (event) => {
+			this.client.sendChat({
+				name: this.sheet.name,
+				message: event.message
+			});
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.ADD_EROTION_VALUE, (event) => {
 			this.updateCost(event);
