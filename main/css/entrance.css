@@ -4,6 +4,28 @@
 	background-color: #C0C0D0;
 }
 
+#entrance-sheet > button {
+	height: 100px;
+	width: 400px;
+	background-color: transparent;
+	border: 4px outset #b80b86;
+	text-align: left;
+	margin-bottom: 4px;
+}
+
+#entrance-sheet > button:hover {
+	border: 4px inset #b80b86;
+	background-color: #A0A0A0;
+}
+
+.entrance-sheet-button-label {
+	font-size: 120%;
+}
+
+.entrance-sheet-button-text {
+	font-size: 80%;
+}
+
 .entrance-tof-room-rooms-room,
 .entrance-discord-room-room {
 	border: 4px double #b80b86;
