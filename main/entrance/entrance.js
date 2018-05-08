@@ -59,8 +59,10 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 	buildDom() {
 		this.$html.append(`<button id="${this.id}-init">シート URL から入力しなおす</button><hr/>`);
 		this.$html.append(
-			`<div id="${this.id}-sheet"><p>` +
-			`キャラクターシートの URL： <input list="${this.id}-sheet-list" id="${this.id}-sheet-input" type="text" /></p>` +
+			`<div id="${this.id}-sheet">` +
+			'<p><a href="http://character-sheets.appspot.com/dx3/">キャラクターシート倉庫</a>または' +
+			'<a href="https://charasheet.vampire-blood.net/list_dx3.html">キャラクター保管所</a>で作成したキャラクターの URL を入力してください</p>' +
+			`<p>キャラクターシートの URL： <input list="${this.id}-sheet-list" id="${this.id}-sheet-input" type="text" /></p>` +
 			`<datalist id="${this.id}-sheet-list"></datalist>` +
 			`<button id="${this.id}-sheet-tof">どどんとふに接続</button><br/>` +
 			`<button id="${this.id}-sheet-discord">Discord に接続</button><br/>` +
