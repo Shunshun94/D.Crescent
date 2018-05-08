@@ -68,8 +68,10 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 
 		this.$html.append(
 			`<div id="${this.id}-sheet">` +
-			'<p><a href="http://character-sheets.appspot.com/dx3/">キャラクターシート倉庫</a>または' +
-			'<a href="https://charasheet.vampire-blood.net/list_dx3.html">キャラクター保管所</a>で作成したキャラクターの URL を入力してください</p>' +
+			'<p><a href="https://character-sheets.appspot.com/dx3/">キャラクターシート倉庫</a>または' +
+			'<a href="https://charasheet.vampire-blood.net/list_dx3.html">キャラクター保管所</a>で作成したキャラクターの URL を入力してください<br/>' +
+			'例<br/>　　<strong>https://charasheet.vampire-blood.net/414826</strong> ※https://charasheet.vampire-blood.net/mefc3348c304ce3d8bc934ce1edebf56a では不可<br/>' +
+			'　　<strong>https://character-sheets.appspot.com/dx3/edit.html?key=ahVzfmNoYXJhY3Rlci1zaGVldHMtbXByFgsSDUNoYXJhY3RlckRhdGEY4tbYAQw</strong></p>' +
 			`<p>キャラクターシートの URL： <input list="${this.id}-sheet-list" id="${this.id}-sheet-input" type="text" /></p>` +
 			`<datalist id="${this.id}-sheet-list"></datalist>` + buttons + '</div>'
 		);
