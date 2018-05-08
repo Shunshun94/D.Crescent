@@ -7,6 +7,10 @@ D. Crescent は オンセにおけるダブルクロス the 3rd Edition ([公式
 
 (という目標を実現するために [つける機能一覧](./docs/FunctionList.md))
 
+### ソースコードリポジトリ
+
+https://github.com/Shunshun94/D.Crescent
+
 ### プレ公開
 
 - [ロイス/タイタス および メモリーの管理](./units/lois.html)

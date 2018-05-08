@@ -23,6 +23,12 @@ http://character-sheets.appspot.com/
 
 https://charasheet.vampire-blood.net/
 
+### md ではなく id でアクセスする
+
+例えば **https://charasheet.vampire-blood.net/414826** のキャラクターシートには   
+**https://charasheet.vampire-blood.net/mefc3348c304ce3d8bc934ce1edebf56a** でもアクセスが可能である。   
+しかし、本アプリは前者での入力でしか利用できない。
+
 ### 武器・コンボ欄のその他欄にクリティカル値・侵蝕率上昇を記載する
 
 キャラクター保管所にはクリティカル値や侵蝕率の記入欄がない。
