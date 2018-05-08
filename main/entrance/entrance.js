@@ -58,15 +58,23 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 	
 	buildDom() {
 		this.$html.append(`<button id="${this.id}-init">シート URL から入力しなおす</button><hr/>`);
+
+		let buttons = '';
+		for(var key in io.github.shunshun94.HiyokoCross.Entrance.PLATFORMS) {
+			const platform = io.github.shunshun94.HiyokoCross.Entrance.PLATFORMS[key];
+			buttons += 	`<button id="${this.id}-sheet-${key}"><span class="${this.id}-sheet-button-label">${platform.label}</span><br/>` +
+						`　　<span class="${this.id}-sheet-button-text">${platform.text}</span></button><br/>`;
+		}
+
 		this.$html.append(
-			`<div id="${this.id}-sheet"><p>` +
-			`キャラクターシートの URL： <input list="${this.id}-sheet-list" id="${this.id}-sheet-input" type="text" /></p>` +
-			`<datalist id="${this.id}-sheet-list"></datalist>` +
-			`<button id="${this.id}-sheet-tof">どどんとふに接続</button><br/>` +
-			`<button id="${this.id}-sheet-discord">Discord に接続</button><br/>` +
-			`<button id="${this.id}-sheet-dummy">動作確認する</button>` +
-			`</div>`
-		)
+			`<div id="${this.id}-sheet">` +
+			'<p><a href="https://character-sheets.appspot.com/dx3/">キャラクターシート倉庫</a>または' +
+			'<a href="https://charasheet.vampire-blood.net/list_dx3.html">キャラクター保管所</a>で作成したキャラクターの URL を入力してください<br/>' +
+			'例<br/>　　<strong>https://charasheet.vampire-blood.net/414826</strong> ※https://charasheet.vampire-blood.net/mefc3348c304ce3d8bc934ce1edebf56a では不可<br/>' +
+			'　　<strong>https://character-sheets.appspot.com/dx3/edit.html?key=ahVzfmNoYXJhY3Rlci1zaGVldHMtbXByFgsSDUNoYXJhY3RlckRhdGEY4tbYAQw</strong></p>' +
+			`<p>キャラクターシートの URL： <input list="${this.id}-sheet-list" id="${this.id}-sheet-input" type="text" /></p>` +
+			`<datalist id="${this.id}-sheet-list"></datalist>` + buttons + '</div>'
+		);
 		this.$html.append(
 				`<div id="${this.id}-tof">` +
 				`<div id="${this.id}-tof-url"><h2>使うどどんとふを選択してください</h2>`+
@@ -103,3 +111,18 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		this.discord = new io.github.shunshun94.trpg.discord.Entrance(this.getElementById('discord'));
 	}
 }
+
+io.github.shunshun94.HiyokoCross.Entrance.PLATFORMS = {
+	tof: {
+		label: 'どどんとふに接続する',
+		text: 'ブラウザ上で動作するオンラインセッションプラットフォーム、どどんとふに接続します。任意のどどんとふサーバ上に部屋をあらかじめ用意しておく必要があります'
+	},
+	discord: {
+		label: 'Discord に接続する',
+		text: 'ブラウザおよびアプリで動作するゲーマー向けチャット・音声通話ツール Discord に接続します。あらかじめBot ユーザの作成と BCDice-API サーバを用意しておく必要があります'
+	},
+	dummy: {
+		label: '動作確認する',
+		text: 'ブラウザ上で本アプリの動作を確認します。達成値やダメージ値はダミーの値しか計算されませんが、外部に影響を与えることなくどのようにアプリが動作するのかを確認できます'
+	}
+};
