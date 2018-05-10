@@ -20,6 +20,17 @@ https://github.com/Shunshun94/D.Crescent
 
 [更新履歴](./docs/version.md)
 
+## どうやって使うの
+
+### とりあえず使う
+
+[http://shunshun94.web.fc2.com/dx3/main/index.html](http://shunshun94.web.fc2.com/dx3/main/index.html) から利用可能。
+
+### デプロイする
+
+本リポジトリの main 以下を任意のウェブサーバにデプロイし、
+ユーザを `/main/index.html` にアクセスするように誘導する。
+
 ## ライセンス
 
 ### このアプリのライセンス
