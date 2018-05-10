@@ -22,52 +22,13 @@ https://github.com/Shunshun94/D.Crescent
 
 ## どうやって使うの
 
-### とりあえず使う
+### 実セッションで使う
 
 [http://shunshun94.web.fc2.com/dx3/main/index.html](http://shunshun94.web.fc2.com/dx3/main/index.html) から利用可能。
 
-### デプロイする
+利用の際は以下の2つを事前準備する必要がある。
 
-本リポジトリの main 以下を任意のウェブサーバにデプロイし、
-ユーザを `/main/index.html` にアクセスするように誘導する。
-
-## ライセンス
-
-### このアプリのライセンス
-
-[MIT　ライセンス](./LICENSE)
-
-### 使った外部ライブラリのライセンス
-
-#### jQuery v.3.1.0
-
-Copyright (c) 2005, 2016 jQuery Foundation, Inc.
-
-MIT ライセンスです。
-
-ライセンス情報:  https://jquery.org/license/
-
-#### jQuery UI v.1.12.1
-
-Copyright (c) jQuery Foundation and other contributors
-
-MIT ライセンスです。
-
-ライセンス情報:  https://jquery.org/license/
-
-#### discord.io
-
-Copyright (c) 2015 izy521
-
-MIT ライセンスです。
-
-ライセンス情報:  https://github.com/izy521/discord.io/blob/master/LICENSE
-
-## どうやって使うの
-
-以下の2つを事前準備する。
-
-### キャラクターシート
+#### キャラクターシート
 
 以下のどちらかでキャラクターシートを作る。
 
@@ -77,7 +38,7 @@ MIT ライセンスです。
 本アプリはどちらで作ったキャラクターシートにも対応する。
 [キャラクターシート入力のコツ](./docs/characterSheet.md)も参照すること。
 
-### オンセ会場
+#### オンセ会場
 
 以下のオンセプラットフォームに対応している。
 
@@ -114,3 +75,42 @@ Discord の bot に関する公式の情報は [Discord - Developer Documentatio
 
 BCDice-API サーバは自分で用意してもかまわないし、他の人が用意した既存のものを利用してもかまわない。
 [BCDice-API サーバのリポジトリ](https://github.com/ysakasin/bcdice-api) により詳しい情報がある。
+
+
+### デプロイする
+
+本リポジトリの main 以下を任意のウェブサーバにデプロイし、
+ユーザを `/main/index.html` にアクセスするように誘導することで利用が可能。
+
+## ライセンス
+
+### このアプリのライセンス
+
+[MIT　ライセンス](./LICENSE)
+
+### 使った外部ライブラリのライセンス
+
+#### jQuery v.3.1.0
+
+Copyright (c) 2005, 2016 jQuery Foundation, Inc.
+
+MIT ライセンスです。
+
+ライセンス情報:  https://jquery.org/license/
+
+#### jQuery UI v.1.12.1
+
+Copyright (c) jQuery Foundation and other contributors
+
+MIT ライセンスです。
+
+ライセンス情報:  https://jquery.org/license/
+
+#### discord.io
+
+Copyright (c) 2015 izy521
+
+MIT ライセンスです。
+
+ライセンス情報:  https://github.com/izy521/discord.io/blob/master/LICENSE
+
