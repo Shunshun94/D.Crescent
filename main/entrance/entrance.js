@@ -21,7 +21,7 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room}&dicebot=${e.value.dicebot}`
 	}
 	buildDummyUrl(e) {
-		document.location = `./dcrescent.html?sheet=${this.getSheetId()}`;
+		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getSheetId()}&dicebot=${this.getElementById('dummy-bcdice-url').val()}`;
 	}
 	
 	bindEvents() {
@@ -43,13 +43,18 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 			this.getElementById('sheet').hide(com.hiyoko.component.InputFlow.Child.SPEED);
 		});
 		this.getElementById('sheet-dummy').click((e) => {
-			this.buildDummyUrl({value:{}})
+			this.getElementById('init').show();
+			this.getElementById('dummy').show(com.hiyoko.component.InputFlow.Child.SPEED);
+			this.getElementById('sheet').hide(com.hiyoko.component.InputFlow.Child.SPEED);
 		});
 		this.getElementById('tof').on(com.hiyoko.component.InputFlow.Events.Finish, (e) => {
 			this.buildTofUrl(e);
 		});
 		this.getElementById('discord').on(com.hiyoko.component.InputFlow.Events.Finish, (e) => {
 			this.buildDiscordUrl(e);
+		});
+		this.getElementById('dummy-bcdice-next').click((e) => {
+			this.buildDummyUrl({value:{}});
 		});
 		this.getElementById('init').click((e) => {
 			location.reload();
@@ -96,10 +101,23 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 				`</div></div>`
 		);
 		this.$html.append(`<div id="${this.id}-discord"></div>`);
+		this.$html.append(	`<div id="${this.id}-dummy"><div id="${this.id}-dummy-bcdice"><p>BCDiceAPI の URL：` +
+							`<input list="${this.id}-dummy-bcdice-list" placeholder="https://www.example.com/bcdice-api" id="${this.id}-dummy-bcdice-url" type="text" />` +
+							`<button id="${this.id}-dummy-bcdice-next">入力完了</button>` +
+							`<datalist id="${this.id}-dummy-bcdice-list"></datalist></div></div>`);
 		this.getElementById('init').hide();
+		
 		this.getElementById('tof-url-FreeInput').hide();
 		this.getElementById('tof').hide();
+
+		this.getElementById('dummy').hide();
+		const list = JSON.parse(localStorage.getItem(io.github.shunshun94.trpg.discord.Entrance.BCDice.UrlList) || '[]');
+		this.getElementById('dummy-bcdice-list').append(list.map((url) => {
+			return `<option value="${url}"></option>`;
+		}).join(''));
+
 		this.getElementById('discord').hide();
+
 		this.getElementById('sheet > button').hide();
 		com.hiyoko.util.forEachMap(JSON.parse(localStorage.getItem('com-hiyoko-sample-dx3sheetparse-index') || '{}'), (v, k) => {
 			$(`#${this.id}-sheet-list`).append(`<option value="${k}">${v}</option>`);
