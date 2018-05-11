@@ -101,7 +101,9 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 				`</div></div>`
 		);
 		this.$html.append(`<div id="${this.id}-discord"></div>`);
-		this.$html.append(	`<div id="${this.id}-dummy"><div id="${this.id}-dummy-bcdice"><p>BCDiceAPI の URL：` +
+		this.$html.append(	`<div id="${this.id}-dummy"><div id="${this.id}-dummy-bcdice">`+
+							`<p>BCDice-API についてはこちら： <a href="https://github.com/ysakasin/bcdice-api/blob/master/README.md">bcdice-api/README.md at master · ysakasin/bcdice-api</a></p>` +
+							`<p>BCDiceAPI の URL：` +
 							`<input list="${this.id}-dummy-bcdice-list" placeholder="https://www.example.com/bcdice-api" id="${this.id}-dummy-bcdice-url" type="text" />` +
 							`<button id="${this.id}-dummy-bcdice-next">入力完了</button>` +
 							`<datalist id="${this.id}-dummy-bcdice-list"></datalist></div></div>`);
