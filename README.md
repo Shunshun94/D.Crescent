@@ -96,6 +96,12 @@ BCDice-API サーバは自分で用意してもかまわないし、他の人が
 
 ### 使った外部ライブラリのライセンス
 
+#### ダブルクロス The 3rd Edition
+
+ダブルクロス The 3rd Edition は有限会社ファーイースト・アミューズメント・リサーチの著作物です
+
+公式サイト： http://www.fear.co.jp/
+
 #### jQuery v.3.1.0
 
 Copyright (c) 2005, 2016 jQuery Foundation, Inc.
@@ -120,7 +126,7 @@ MIT ライセンスです。
 
 ライセンス情報:  https://github.com/izy521/discord.io/blob/master/LICENSE
 
-#### OGP 画像の一部
+#### トップの画像
 
 [nanoha さん](https://prcm.jp/user/czFoHR2) 作成の加工素材を用いて作成しています。   
 素材 URL: [https://prcm.jp/album/f0aa66330945b/pic/70491381](https://prcm.jp/album/f0aa66330945b/pic/70491381)
