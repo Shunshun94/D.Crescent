@@ -252,7 +252,8 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 					'財産ポイント': this.sheet.subStatus.property,
 					'ロイス': this.sheet.lois.filter((lois) => {
 						return !(lois.titus || lois.type === 'Dロイス');
-					}).length
+					}).length,
+					initiative: this.sheet.subStatus.speed
 				};
 			}
 		});
