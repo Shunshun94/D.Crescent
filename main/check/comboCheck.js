@@ -17,18 +17,25 @@ io.github.shunshun94.HiyokoCross.ComboCheck = class extends com.hiyoko.component
 	}
 	
 	generateComboDom (combo, num) {
-		return 	`<div class="${this.id}-combo ${this.clazz}-skill" id="${this.id}-combo-${num}">` +
-				`<span class="${this.id}-combo-name　${this.clazz}-skill-name">${combo.name}</span>　` +
-				`<button class="${this.id}-combo-exec ${this.clazz}-skill-exec" id="${this.id}-combo-exec-${num}">判定する</button>` +
+		const $dummy = $('<div></div>');
+		const $base = $(`<div class="${this.id}-combo ${this.clazz}-skill" id="${this.id}-combo-${num}"></div>`);
+		const $name = $(`<span class="${this.id}-combo-name　${this.clazz}-skill-name"></span>`);
+		$name.text(combo.name);
+		$base.append($name);
+		$base.append(
+				` <button class="${this.id}-combo-exec ${this.clazz}-skill-exec" id="${this.id}-combo-exec-${num}">判定する</button>` +
 				`<div class="${this.id}-combo-spec">` +
-					`ダイス<span class="${this.id}-combo-spec-dice">${combo.dice}</span> / ` +
-					`命中<span class="${this.id}-combo-spec-hit">${combo.hit}</span> /` +
-					`C値<span class="${this.id}-combo-spec-critical">${combo.critical}</span> /` +
-					`攻撃力<span class="${this.id}-combo-spec-attack">${combo.attack}</span> /` +
-					`ガード値<span class="${this.id}-combo-spec-guard">${combo.guard}</span> /` +
-					`侵蝕率<span class="${this.id}-combo-spec-cost">${combo.cost}</span>` +
-				`</div>` +
-				`<div class="${this.id}-combo-note">${combo.notes || ''}</div></div>`;
+				`ダイス<span class="${this.id}-combo-spec-dice">${combo.dice}</span> / ` +
+				`命中<span class="${this.id}-combo-spec-hit">${combo.hit}</span> /` +
+				`C値<span class="${this.id}-combo-spec-critical">${combo.critical}</span> /` +
+				`攻撃力<span class="${this.id}-combo-spec-attack">${combo.attack}</span> /` +
+				`ガード値<span class="${this.id}-combo-spec-guard">${combo.guard}</span> /` +
+				`侵蝕率<span class="${this.id}-combo-spec-cost">${combo.cost}</span></div>`)
+		const $text = $(`<div class="${this.id}-combo-note"></div>`);
+		$text.text(combo.notes || '');
+		$base.append($text);
+		$dummy.append($base);
+		return $dummy.html();
 	}
 
 	clickExec(e) {

@@ -1,11 +1,17 @@
 # D. Crescent
 
+![D. Crescent](./docs/ogp-pl.png "D. Crescent トップ画像")
+
 ## どんなツール
 
 D. Crescent は オンセにおけるダブルクロス the 3rd Edition ([公式ページ](http://www.fear.co.jp/dbx3rd/)) のセッションテンポを向上させたい GM/プレイヤー 向けの PC 管理用ツール。   
 ユーザはスムーズな判定や情報共有を実現でき、チャットパレットに比較して他プレイヤーとの情報共有や修正値の管理の面で強力である。
 
 (という目標を実現するために [つける機能一覧](./docs/FunctionList.md))
+
+### ツールを使う
+
+[http://shunshun94.web.fc2.com/dx3/main/index.html](http://shunshun94.web.fc2.com/dx3/main/index.html)
 
 ### ソースコードリポジトリ
 
@@ -90,6 +96,12 @@ BCDice-API サーバは自分で用意してもかまわないし、他の人が
 
 ### 使った外部ライブラリのライセンス
 
+#### ダブルクロス The 3rd Edition
+
+ダブルクロス The 3rd Edition は有限会社ファーイースト・アミューズメント・リサーチの著作物です
+
+公式サイト： http://www.fear.co.jp/
+
 #### jQuery v.3.1.0
 
 Copyright (c) 2005, 2016 jQuery Foundation, Inc.
@@ -114,3 +126,25 @@ MIT ライセンスです。
 
 ライセンス情報:  https://github.com/izy521/discord.io/blob/master/LICENSE
 
+#### トップの画像
+
+[nanoha さん](https://prcm.jp/user/czFoHR2) 作成の加工素材を用いて作成しています。   
+素材 URL: [https://prcm.jp/album/f0aa66330945b/pic/70491381](https://prcm.jp/album/f0aa66330945b/pic/70491381)
+
+ライセンスは下記の通り。
+
+【注意点】   
+☆自作発言✕   
+☆Twitter垢は自作発言防止のため(邪魔ですみません)   
+☆｢やり方教えてください｣✕   
+☆保存のみ△   
+☆いいね→保存◎   
+☆リクエスト◎   
+☆コメント◎   
+☆フォロー◎   
+☆無言フォローごめんなさい   
+☆トプ画やホーム画などのSNSで公開される画像への使用◎   
+☆再加工◎   
+☆☝︎からの再配布◎   
+
+ライセンス情報：　https://prcm.jp/user/czFoHR2
