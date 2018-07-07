@@ -50,7 +50,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 
 	updateLoisStorage() {
 		const loisList = this.loisList.getData();
-		com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name, loisList);
+		com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.id, loisList);
 	}
 
 	bindEvents() {
@@ -70,7 +70,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			const loisCount = loisList.lois.filter((lois) => {
 				return !(lois.titus || lois.type === 'Dロイス');
 			}).length;
-			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name, loisList);
+			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.id, loisList);
 			this.client.updateCharacter({
 						targetName: this.sheet.name,
 						'ロイス': loisCount
@@ -230,7 +230,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	appendCharacter() {
-		const saveLoisMemoryData = com.hiyoko.util.getLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name);
+		const saveLoisMemoryData = com.hiyoko.util.getLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.id);
 		if(saveLoisMemoryData && window.confirm('前回プレイしたときのロイス情報が残っています。読み込みますか?')) {
 			for(var key in saveLoisMemoryData) {
 				this.sheet[key] = saveLoisMemoryData[key];
