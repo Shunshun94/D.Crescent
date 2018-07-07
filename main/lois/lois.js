@@ -127,7 +127,7 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 		
 		this.$html.on('getStorage', (e) => {
 			const list = this.sheet.lois.map((lois) => {
-				return [lois.name, (lois.type === 'Dロイス'), lois.Pfeel, lois.Nfeel, lois.isSLois, lois.titus, lois.used]
+				return [lois.name, (lois.type === 'Dロイス' || lois.type === 'D'), lois.Pfeel, lois.Nfeel, lois.isSLois, lois.titus, lois.used]
 			});
 			e.callback(list);
 		});
