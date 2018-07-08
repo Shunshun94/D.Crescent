@@ -231,7 +231,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 
 	appendCharacter() {
 		const saveLoisMemoryData = com.hiyoko.util.getLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.id);
-		if(saveLoisMemoryData && window.confirm('前回プレイしたときのロイス情報が残っています。読み込みますか?')) {
+		if(saveLoisMemoryData && window.confirm('前回プレイしたときのロイス情報が残っています。読み込み ますか?')) {
 			for(var key in saveLoisMemoryData) {
 				this.sheet[key] = saveLoisMemoryData[key];
 			}
@@ -240,6 +240,8 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
 			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
+		this.$html.append(`<div id="${this.id}-characterNameSetter"></div>`);
+		const nameSetter = new io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter(this.getElementById('characterNameSetter'));
 		const characterManager = new io.github.shunshun94.trpg.CharacterManager(this.$html, {
 			sheetHandler: {
 				getSheet: (dummy, sheet) => {return new Promise(function(resolve, reject) {resolve(sheet)});}
@@ -255,7 +257,8 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 					}).length,
 					initiative: this.sheet.subStatus.speed
 				};
-			}
+			},
+			sheetApplyer: nameSetter.kick.bind(nameSetter)
 		});
 		return characterManager.appendCharacters(this.sheet);
 	}
