@@ -19,6 +19,7 @@ io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter = class extend
 	}
 	kick(characterData, nameList, characterListFromPlatform, resolve, reject, self) {
 		this.list.empty();
+		this.enable();
 		if(nameList.indexOf(characterData.name) > -1) {
 			this.list.append(this.generateSelectButton(characterData.name));
 		} else {
