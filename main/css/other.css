@@ -12,3 +12,18 @@
 	border: 4px inset #b80b86;
 	background-color: #A0A0A0;
 }
+
+.io-github-shunshun94-HiyokoCross-characterNameSetter-list-color {
+	height: 30px;
+	width: 500px;
+	background-color: white;
+	border: 4px outset #b80b86;
+	text-align: left;
+	margin-bottom: 4px;
+	display:block;
+}
+
+.io-github-shunshun94-HiyokoCross-characterNameSetter-list-color:hover {
+	border: 4px inset #b80b86;
+	background-color: #D0D0D0;
+}
