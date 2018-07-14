@@ -100,12 +100,9 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 			
 			
 			this.fireEvent({
-				type: 'tofRoomRequest',
+				type: io.github.shunshun94.HiyokoCross.Lois.SHARING_LOIS_LIST,
 				method: 'sendChat',
-				args: [{
-					name: this.sheet.name,
-					message: message
-				}]
+				message: message
 			});
 		});
 		
@@ -136,5 +133,6 @@ io.github.shunshun94.HiyokoCross.Lois = class extends com.hiyoko.component.Appli
 
 io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_REQUEST = 'io-github-shunshun94-HiyokoCross-Lois-UPDATE_LOIS_REQUEST';
 io.github.shunshun94.HiyokoCross.Lois.SEND_MESSAGE_REQUEST = 'io-github-shunshun94-HiyokoCross-Lois-SEND_MESSAGE_REQUEST';
+io.github.shunshun94.HiyokoCross.Lois.SHARING_LOIS_LIST = 'io-github-shunshun94-HiyokoCross-Lois-SHARING_LOIS_LIST';
 io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE = 'io-github-shunshun94-HiyokoCross-Lois-KEEP_STORE';
 io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_STORAGE = 'io-github-shunshun94-HiyokoCross-Lois-UPDATE_LOIS_STORAGE';

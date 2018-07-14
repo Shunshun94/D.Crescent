@@ -5,6 +5,7 @@ io.github.shunshun94.HiyokoCross = io.github.shunshun94.HiyokoCross || {};
 io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.component.ApplicationBase {
 	constructor($dom, sheet, opts = {}) {
 		super($dom, opts);
+		this.options = opts;
 		this.client = opts.client || new io.github.shunshun94.trpg.dummy.Room($(`#${this.id}-log`));
 		this.sheet = sheet;
 		this.max = 0;
@@ -87,11 +88,20 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			this.updateCost(event);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Attack, (event) => {
+			event.args[0].color = this.sheet.color;
 			this.client.sendChat(event.args[0]);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.SHARING_LOIS_LIST, (event) => {
+			this.client.sendChat({
+				name: this.sheet.name,
+				color: this.sheet.color,
+				message: event.message
+			});
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.SEND_MESSAGE_REQUEST, (event) => {
 			this.client.sendChat({
 				name: this.sheet.name,
+				color: this.sheet.color,
 				message: event.message
 			});
 		});
@@ -106,6 +116,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			}).then((dummy) => {
 				this.client.sendChat({
 					name: this.sheet.name,
+					color: this.sheet.color,
 					message: `侵蝕率修正： ${event.value}`
 				});
 			}, (err) => {
@@ -131,6 +142,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	sendChatAsyn(params) {
+		params.color = this.sheet.color;
 		if(! Boolean(params.name)) {
 			params.name = this.sheet.name;
 		}
@@ -241,7 +253,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
 		this.$html.append(`<div id="${this.id}-characterNameSetter"></div>`);
-		const nameSetter = new io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter(this.getElementById('characterNameSetter'));
+		const nameSetter = new io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter(this.getElementById('characterNameSetter'), this.options);
 		const characterManager = new io.github.shunshun94.trpg.CharacterManager(this.$html, {
 			sheetHandler: {
 				getSheet: (dummy, sheet) => {return new Promise(function(resolve, reject) {resolve(sheet)});}
