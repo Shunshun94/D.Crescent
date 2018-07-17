@@ -57,6 +57,16 @@
 	margin-left: 16px;
 }
 
+#io-github-shunshun94-HiyokoCross-checklist-options-simple {
+	margin-left: 16px;
+	padding-bottom: 8px;
+}
+.io-github-shunshun94-HiyokoCross-checklist-options-simple-number {
+	width: 30px;
+}
+.io-github-shunshun94-HiyokoCross-checklist-options-simple-text {
+	width: 140px;
+}
 .io-github-shunshun94-HiyokoCross-checklist-options-table-header-0,
 .io-github-shunshun94-HiyokoCross-checklist-options-table-member-0 {
 	width: 12px;

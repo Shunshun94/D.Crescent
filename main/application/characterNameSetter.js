@@ -39,15 +39,19 @@ io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter = class extend
 		});
 	}
 	kick(characterData, nameList, characterListFromPlatform, resolve, reject, self) {
-		const onNameClick = (e) => {
-			characterData.name = $(e.target).val();
+		const onNameClick = (e, opt_name) => {
+			if(opt_name) {
+				characterData.name = opt_name;
+			} else {
+				characterData.name = $(e.target).val();
+			}
 			if(this.options.color) {
 				characterData.color = this.options.color; 
 				io.github.shunshun94.trpg.sheetApplyer(characterData, nameList, characterListFromPlatform, resolve, reject, self);
 				this.disable();
 			}
 			this.getNameColorList().then((list) => {
-				const defaultColor = io.github.shunshun94.util.Color.getColorFromSheed(characterData.name).code.substr(1);
+				const defaultColor = io.github.shunshun94.util.Color.getColorFromSheed(characterData.id).code.substr(1);
 				this.list.empty();
 				this.list.append(this.generateColorButton(defaultColor));
 				for(var name in list) {
@@ -65,21 +69,24 @@ io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter = class extend
 			io.github.shunshun94.trpg.sheetApplyer(characterData, nameList, characterListFromPlatform, resolve, reject, self);
 			this.disable();
 		};
-		
 		this.list.empty();
 		this.enable();
-		if(nameList.indexOf(characterData.name) > -1) {
-			this.list.append(this.generateSelectButton(characterData.name));
+		if(this.options.name) {
+			onNameClick(null, this.options.name);
 		} else {
-			this.list.append(this.generateNewButton(characterData.name));
+			if(nameList.indexOf(characterData.name) > -1) {
+				this.list.append(this.generateSelectButton(characterData.name));
+			} else {
+				this.list.append(this.generateNewButton(characterData.name));
+			}
+			this.list.append('<hr/>');
+			this.list.append(nameList.filter((name)=> {
+				return name !== characterData.name;
+			}).map((name) => {
+				return this.generateSelectButton(name);
+			}).join(''));
+			
+			this.getElementsByClass('list-name').click(onNameClick);
 		}
-		this.list.append('<hr/>');
-		this.list.append(nameList.filter((name)=> {
-			return name !== characterData.name;
-		}).map((name) => {
-			return this.generateSelectButton(name);
-		}).join(''));
-		
-		this.getElementsByClass('list-name').click(onNameClick);
 	}
 };
