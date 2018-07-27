@@ -56,7 +56,7 @@ io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter = class extend
 				this.list.append(this.generateColorButton(defaultColor));
 				for(var name in list) {
 					for(var color in list[name]) {
-						this.list.append(this.generateColorButton(io.github.shunshun94.util.Color.colorConvert(color).code.substr(1), name));
+						this.list.append(this.generateColorButton(color, name));
 					}
 				}
 				this.getElementsByClass('list-color').click(onColorClick);
