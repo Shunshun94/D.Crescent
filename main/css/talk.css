@@ -1,0 +1,20 @@
+#io-github-shunshun94-HiyokoCross-talk {
+	position: absolute;
+	right: 16px;
+	top: 82px;
+}
+
+#io-github-shunshun94-HiyokoCross-talk-chat {
+	background-color: white;
+	position: relative;
+	top: 30px;
+}
+
+#io-github-shunshun94-HiyokoCross-talk-toggle {
+	text-align: center;
+	width: 98px;
+	background-color: white;
+	position: absolute;
+	top: 2px;
+	right:2px;
+}

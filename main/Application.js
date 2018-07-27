@@ -31,6 +31,8 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.checkList = new io.github.shunshun94.HiyokoCross.CheckList(this.getElementById('checklist'), this.sheet);
 		this.$html.append(`<div id="${this.id}-lois"></div>`);
 		this.loisList = new io.github.shunshun94.HiyokoCross.Lois(this.getElementById('lois'), this.sheet);
+		this.$html.append(`<div id="${this.id}-talk"></div>`);
+		this.talk = new io.github.shunshun94.HiyokoCross.Talk(this.getElementById('talk'), this.sheet);
 	}
 
 	updateCost(event) {
