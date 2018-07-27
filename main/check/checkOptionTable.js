@@ -95,7 +95,7 @@ io.github.shunshun94.HiyokoCross.CheckOptionTableBase = class extends com.hiyoko
 					critical: $($values[2]).val(),
 					attack: $($values[3]).val(),
 					name: '各種修正値',
-					notes: this.getElementsByClass('simple-number').val()
+					notes: this.getElementsByClass('simple-text').val()
 				}
 			];
 		}
