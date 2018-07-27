@@ -5,6 +5,7 @@ io.github.shunshun94.HiyokoCross = io.github.shunshun94.HiyokoCross || {};
 io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.component.ApplicationBase {
 	constructor($dom, sheet, opts = {}) {
 		super($dom, opts);
+		this.options = opts;
 		this.client = opts.client || new io.github.shunshun94.trpg.dummy.Room($(`#${this.id}-log`));
 		this.sheet = sheet;
 		this.max = 0;
@@ -30,6 +31,8 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.checkList = new io.github.shunshun94.HiyokoCross.CheckList(this.getElementById('checklist'), this.sheet);
 		this.$html.append(`<div id="${this.id}-lois"></div>`);
 		this.loisList = new io.github.shunshun94.HiyokoCross.Lois(this.getElementById('lois'), this.sheet);
+		this.$html.append(`<div id="${this.id}-talk"></div>`);
+		this.talk = new io.github.shunshun94.HiyokoCross.Talk(this.getElementById('talk'), this.sheet);
 	}
 
 	updateCost(event) {
@@ -50,7 +53,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 
 	updateLoisStorage() {
 		const loisList = this.loisList.getData();
-		com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name, loisList);
+		com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.id, loisList);
 	}
 
 	bindEvents() {
@@ -70,7 +73,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			const loisCount = loisList.lois.filter((lois) => {
 				return !(lois.titus || lois.type === 'Dロイス');
 			}).length;
-			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name, loisList);
+			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.id, loisList);
 			this.client.updateCharacter({
 						targetName: this.sheet.name,
 						'ロイス': loisCount
@@ -87,11 +90,20 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			this.updateCost(event);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.CheckList.EVENTS.Attack, (event) => {
+			event.args[0].color = this.sheet.color;
 			this.client.sendChat(event.args[0]);
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.SHARING_LOIS_LIST, (event) => {
+			this.client.sendChat({
+				name: this.sheet.name,
+				color: this.sheet.color,
+				message: event.message
+			});
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.SEND_MESSAGE_REQUEST, (event) => {
 			this.client.sendChat({
 				name: this.sheet.name,
+				color: this.sheet.color,
 				message: event.message
 			});
 		});
@@ -106,6 +118,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			}).then((dummy) => {
 				this.client.sendChat({
 					name: this.sheet.name,
+					color: this.sheet.color,
 					message: `侵蝕率修正： ${event.value}`
 				});
 			}, (err) => {
@@ -131,6 +144,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	sendChatAsyn(params) {
+		params.color = this.sheet.color;
 		if(! Boolean(params.name)) {
 			params.name = this.sheet.name;
 		}
@@ -230,7 +244,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 	}
 
 	appendCharacter() {
-		const saveLoisMemoryData = com.hiyoko.util.getLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.name);
+		const saveLoisMemoryData = com.hiyoko.util.getLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.id);
 		if(saveLoisMemoryData && window.confirm('前回プレイしたときのロイス情報が残っています。読み込みますか?')) {
 			for(var key in saveLoisMemoryData) {
 				this.sheet[key] = saveLoisMemoryData[key];
@@ -240,6 +254,8 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
 			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
 		});
+		this.$html.append(`<div id="${this.id}-characterNameSetter"></div>`);
+		const nameSetter = new io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter(this.getElementById('characterNameSetter'), this.options);
 		const characterManager = new io.github.shunshun94.trpg.CharacterManager(this.$html, {
 			sheetHandler: {
 				getSheet: (dummy, sheet) => {return new Promise(function(resolve, reject) {resolve(sheet)});}
@@ -255,7 +271,8 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 					}).length,
 					initiative: this.sheet.subStatus.speed
 				};
-			}
+			},
+			sheetApplyer: nameSetter.kick.bind(nameSetter)
 		});
 		return characterManager.appendCharacters(this.sheet);
 	}

@@ -34,15 +34,30 @@ io.github.shunshun94.HiyokoCross.CheckOptionTableBase = class extends com.hiyoko
 		const list = e.value.slice(this.defaultLength);
 		localStorage.setItem('io-github-shunshun94-HiyokoCross-CheckOption', JSON.stringify(list));
 	}
-	
-	
+
 	buildDoms() {
-		this.$html.append(`<h3 class="${this.clazz}-header">修正値管理　<button id="${this.id}-toggle">開閉</button></h3>`);
+		this.$html.append(`<h3 class="${this.clazz}-header">修正値管理　<button id="${this.id}-toggle">簡易設定 / 詳細設定 切替</button></h3>`);
+		this.$html.append(`<div id="${this.id}-simple" border="1">
+				ダイス： <input class="${this.id}-simple-number" type="number" value="0" size="5" /> /
+				達成値： <input class="${this.id}-simple-number" type="number" value="0" /> /
+				クリ値： <input class="${this.id}-simple-number" type="number" value="0" /> /
+				攻撃力： <input class="${this.id}-simple-number" type="number" value="0" /> /
+				侵蝕率： <input class="${this.id}-simple-number" type="number" value="0" /> /
+				補足説明： <input class="${this.id}-simple-text" type="text" value="" /> /
+				<button id="${this.id}-simple-reset">リセット</button>
+		</div>`)
 		this.$html.append(`<table id="${this.id}-table" border="1"></table>`);
 	}
 	
 	bindEvents() {
-		this.getElementById('toggle').click((e) => {this.getElementById('table').toggle(300);});
+		this.getElementById('toggle').click((e) => {
+			this.getElementById('table').toggle(300);
+			this.getElementById('simple').toggle(300);
+		});
+		this.getElementById('simple-reset').click((e) => {
+			this.getElementsByClass('simple-number').val('0');
+			this.getElementsByClass('simple-text').val('');
+		});
 		this.getElementById('table').on('setStorage', (e) => {this.saveOptions(e);});
 		this.getElementById('table').on('getStorage', (e) => {
 			this.storageId = e.id;
@@ -56,19 +71,35 @@ io.github.shunshun94.HiyokoCross.CheckOptionTableBase = class extends com.hiyoko
 	}
 	
 	getValues() {
-		return this.options.getTableValue().filter((line) => {
-			return line[0];
-		}).map((line) => {
-			return new io.github.shunshun94.HiyokoCross.CheckDto({
-				cost: line[6],
-				dice: line[2],
-				hit: line[3],
-				critical: line[4],
-				attack: line[5],
-				name: line[1],
-				notes: line[7]
+		if(this.options.isEnabled()) {
+			return this.options.getTableValue().filter((line) => {
+				return line[0];
+			}).map((line) => {
+				return new io.github.shunshun94.HiyokoCross.CheckDto({
+					cost: line[6],
+					dice: line[2],
+					hit: line[3],
+					critical: line[4],
+					attack: line[5],
+					name: line[1],
+					notes: line[7]
+				});
 			});
-		});
+		} else {
+			const $values = this.getElementsByClass('simple-number');
+			return [
+				{
+					cost: $($values[4]).val(),
+					dice: $($values[0]).val(),
+					hit: $($values[1]).val(),
+					critical: $($values[2]).val(),
+					attack: $($values[3]).val(),
+					name: '各種修正値',
+					notes: this.getElementsByClass('simple-text').val()
+				}
+			];
+		}
+
 	}
 }
 
@@ -79,7 +110,7 @@ io.github.shunshun94.HiyokoCross.CheckOptionTable = class extends com.hiyoko.com
 		this.id = this.$html.attr('id');
 		this.renderTable(io.github.shunshun94.HiyokoCross.CheckOptionTable.COLS);
 	}
-	
+
 	bindSharedEvent() {
 		// Disabled sortable
 		this.getElementById('add').click(this.addMember.bind(this));
@@ -121,7 +152,7 @@ io.github.shunshun94.HiyokoCross.CheckOptionTable = class extends com.hiyoko.com
 };
 
 io.github.shunshun94.HiyokoCross.CheckOptionTable.COLS = [
-	{title:'', type:'check'}, {title:'名称', type:'text'},
+	{title:'有効', type:'check'}, {title:'名称', type:'text'},
 	{title:'ダイス', type: 'number'}, {title:'達成値', type:'number'},
 	{title:'クリ値', type: 'number'}, {title:'攻撃力', type: 'number'},
 	 {title:'侵蝕率', type: 'text'},{title:'説明', type: 'text'}

@@ -18,7 +18,7 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		document.location = `./dcrescent.html?sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room.no}&pass=${e.value.password.password}`;
 	}
 	buildDiscordUrl(e) {
-		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room}&dicebot=${e.value.dicebot}`
+		document.location = `./dcrescent.html?color=t&system=DoubleCross&sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room}&dicebot=${e.value.dicebot}`
 	}
 	buildDummyUrl(e) {
 		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getSheetId()}&dicebot=${this.getElementById('dummy-bcdice-url').val()}`;
@@ -104,9 +104,8 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		this.$html.append(	`<div id="${this.id}-dummy"><div id="${this.id}-dummy-bcdice">`+
 							`<p>BCDice-API についてはこちら： <a href="https://github.com/ysakasin/bcdice-api/blob/master/README.md">bcdice-api/README.md at master · ysakasin/bcdice-api</a></p>` +
 							`<p>BCDiceAPI の URL：` +
-							`<input list="${this.id}-dummy-bcdice-list" placeholder="https://www.example.com/bcdice-api" id="${this.id}-dummy-bcdice-url" type="text" />` +
-							`<button id="${this.id}-dummy-bcdice-next">入力完了</button>` +
-							`<datalist id="${this.id}-dummy-bcdice-list"></datalist></div></div>`);
+							`<input list="entrance-discord-bcdice-list" placeholder="https://www.example.com/bcdice-api" id="${this.id}-dummy-bcdice-url" type="text" />` +
+							`<button id="${this.id}-dummy-bcdice-next">入力完了</button></div></div>`);
 		this.getElementById('init').hide();
 		
 		this.getElementById('tof-url-FreeInput').hide();
