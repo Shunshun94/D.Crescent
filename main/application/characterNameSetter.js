@@ -72,7 +72,7 @@ io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter = class extend
 		this.list.empty();
 		this.enable();
 		if(this.options.name) {
-			onNameClick(null, this.options.name);
+			onNameClick(null, decodeURI(this.options.name));
 		} else {
 			if(nameList.indexOf(characterData.name) > -1) {
 				this.list.append(this.generateSelectButton(characterData.name));
