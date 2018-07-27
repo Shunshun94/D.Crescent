@@ -43,7 +43,8 @@ io.github.shunshun94.HiyokoCross.CheckOptionTableBase = class extends com.hiyoko
 				クリ値： <input class="${this.id}-simple-number" type="number" value="0" /> /
 				攻撃力： <input class="${this.id}-simple-number" type="number" value="0" /> /
 				侵蝕率： <input class="${this.id}-simple-number" type="number" value="0" /> /
-				補足説明： <input class="${this.id}-simple-text" type="number" value="" />
+				補足説明： <input class="${this.id}-simple-text" type="text" value="" /> /
+				<button id="${this.id}-simple-reset">リセット</button>
 		</div>`)
 		this.$html.append(`<table id="${this.id}-table" border="1"></table>`);
 	}
@@ -52,6 +53,10 @@ io.github.shunshun94.HiyokoCross.CheckOptionTableBase = class extends com.hiyoko
 		this.getElementById('toggle').click((e) => {
 			this.getElementById('table').toggle(300);
 			this.getElementById('simple').toggle(300);
+		});
+		this.getElementById('simple-reset').click((e) => {
+			this.getElementsByClass('simple-number').val('0');
+			this.getElementsByClass('simple-text').val('');
 		});
 		this.getElementById('table').on('setStorage', (e) => {this.saveOptions(e);});
 		this.getElementById('table').on('getStorage', (e) => {

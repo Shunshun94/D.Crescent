@@ -27,3 +27,21 @@
 	border: 4px inset #b80b86;
 	background-color: #D0D0D0;
 }
+
+#io-github-shunshun94-HiyokoCross-characterNameSetter-list-name-editable,
+#io-github-shunshun94-HiyokoCross-characterNameSetter-list-color-editable {
+	height: 30px;
+	width: 500px;
+	margin-top: 0px;
+	margin-bottom: 4px;
+}
+
+#io-github-shunshun94-HiyokoCross-characterNameSetter-list-name-editable > input {
+	height: 20px;
+	width: 373px;
+}
+
+#io-github-shunshun94-HiyokoCross-characterNameSetter-list-color-editable > input {
+	height: 20px;
+	width: 440px;
+}
