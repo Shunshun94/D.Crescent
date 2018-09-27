@@ -34,7 +34,14 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		this.fireEvent({
 			type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_EROTION_VALUE,
 			value: Number(this.getElementById('value').val())
-		})
+		});
+	}
+	
+	updateHpValue() {
+		this.fireEvent({
+			type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_HP_VALUE,
+			value: Number(this.getElementById('hp').val())
+		});
 	}
 
 	throwResurrect() {
@@ -76,8 +83,19 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		}
 	}
 
+	shareInformation() {
+		this.fireEvent({
+			type: 'tofRoomRequest',
+			method: 'sendChat',
+			args: [{
+				message: `HP:${this.getCurrentHp()} / 侵蝕率: ${this.getCurrentEnroach()} / 残ロイス: ${this.loisCount}`
+			}]
+		});
+	}
+
 	bindEvents() {
 		this.getElementById('value').change((e) => {this.updateValue();});
+		this.getElementById('hp').change((e)=>{this.updateHpValue();})
 		this.getElementById('resurrect').click((e) => {this.throwResurrect();})
 		this.getElementById('entry').click((e) => {this.throwEntry();});
 		this.getElementById('impulse').click((e) => {this.throwImpulse();});
@@ -85,30 +103,38 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		this.getElementById('toggle').click((e) => {
 			this.$html.find('div').toggle(400);
 		});
+		this.getElementById('shareStatus').click((e)=>{this.shareInformation();});
+		this.getElementById('fixHp').click((e)=>{
+			this.setCurrentHp(this.getElementById('titusHp').val());
+			this.updateHpValue();
+		});
 	}
 
 	buildComponents() {
 		this.$html.append(`<button id="${this.id}-toggle">侵蝕率管理開閉</button>`);
 		const base1 = $(`<div id="${this.id}-left"></div>`);
-		base1.append(`<span>侵蝕率：<input type="number" id="${this.id}-value"/> / ロイス残： <span id="${this.id}-lois"></span></span><br/>`);
-		base1.append(`<span><span id="${this.id}-bonus"></span></span><hr/>`);
+		base1.append(`<span>侵蝕率：<input type="number" id="${this.id}-value"/>/ロイス残：<span id="${this.id}-lois"></span>/HP：<input type="number" id="${this.id}-hp"/></span><br/>`);
+		base1.append(`<span><button id="${this.id}-shareStatus">状態共有</button><span id="${this.id}-bonus"></span></span><br/>`);
+		base1.append(`<span></span><hr/>`);
 		let max = 1;
 		for(var key in this.sheet.status) {
 			const statusValue = Number(this.sheet.status[key]);
 			max = (max < statusValue) ? statusValue : max;
 		}
 
-		base1.append(`<button id="${this.id}-resurrect">リザレクトする</button>　　`);
-		base1.append(`<button id="${this.id}-entry">シーン登場する</button><hr/>`);
-		base1.append(`<button id="${this.id}-impulse">衝動判定による侵蝕率上昇</button><hr/>`)
+		base1.append(`<button id="${this.id}-fixHp">HPを修正する</button>修正後のHP:<input value="${10+Number(this.sheet.status.body)}" id="${this.id}-titusHp" type="number"/><hr/>`)
+		base1.append(`<button id="${this.id}-resurrect">リザレクト</button>`);
+		base1.append(`<button id="${this.id}-entry">シーン登場</button>`);
+		base1.append(`<button id="${this.id}-impulse">衝動判定の侵蝕率上昇</button><hr/>`)
 		base1.append(`<span id="${this.id}-geneshift">ジェネシフトで振るダイス数： <input type="number" value="1" min="1" max="${max}" id="${this.id}-geneshift-value"/><br/><button id="${this.id}-geneshift-exec">ジェネシフトする</button></span>`);
 		this.$html.append(base1);
 
 		this.$html.append(`<div id="${this.id}-backTrack"></div>`);
 		this.backTrack = new io.github.shunshun94.HiyokoCross.ErotionManage.BackTrack(this.getElementById('backTrack'), this.sheet);
 
-		this.updateLoisCount()
+		this.updateLoisCount();
 		this.setCurrentEnroach(this.sheet['侵蝕率'] || this.sheet.subStatus.erotion);
+		this.setCurrentHp(this.sheet.HP || this.sheet.subStatus.HP || this.sheet.subStatus.MHP);
 	}
 
 	setCurrentBonus(opt_bonus) {
@@ -119,6 +145,13 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 			this.getElementById('bonus').empty();
 			this.getElementById('bonus').append(` エフェクトレベル ＋${bonus.effect}<br/> ダイスボーナス ＋${bonus.dice}`);
 		}
+	}
+	
+	setCurrentHp(val) {
+		this.getElementById('hp').val(val);
+	}
+	getCurrentHp() {
+		return this.getElementById('hp').val();
 	}
 
 	setCurrentEnroach(val) {
@@ -150,6 +183,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 
 io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS = {
 	UPDATE_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-UPDATE_EROTION_VALUE',
+	UPDATE_HP_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-UPDATE_HP_VALUE',
 	ADD_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-ADD_EROTION_VALUE',
 	RESURRECT_REQUEST: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-RESURRECT_REQUEST'
 };
