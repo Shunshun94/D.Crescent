@@ -133,6 +133,18 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 				this.erotion.setCurrentEnroach(event.value);
 			}
 		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_HP_VALUE, (event) => {
+			if(this.isExistInitTable) {
+				this.client.updateCharacter({
+					targetName: this.sheet.name,
+					'HP': event.value
+				}).then((dummy) => {
+					// no action
+				}, (err) => {
+					this.initiativeTableUpdateFailer(err);
+				});
+			}
+		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.RESURRECT_REQUEST, (event) => {
 			this.sendChatAsyn({
 				name: this.sheet.name,

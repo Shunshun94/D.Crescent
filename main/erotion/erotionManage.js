@@ -34,7 +34,14 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		this.fireEvent({
 			type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_EROTION_VALUE,
 			value: Number(this.getElementById('value').val())
-		})
+		});
+	}
+	
+	updateHpValue() {
+		this.fireEvent({
+			type: io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_HP_VALUE,
+			value: Number(this.getElementById('hp').val())
+		});
 	}
 
 	throwResurrect() {
@@ -88,6 +95,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 
 	bindEvents() {
 		this.getElementById('value').change((e) => {this.updateValue();});
+		this.getElementById('hp').change((e)=>{this.updateHpValue();})
 		this.getElementById('resurrect').click((e) => {this.throwResurrect();})
 		this.getElementById('entry').click((e) => {this.throwEntry();});
 		this.getElementById('impulse').click((e) => {this.throwImpulse();});
@@ -98,6 +106,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 		this.getElementById('shareStatus').click((e)=>{this.shareInformation();});
 		this.getElementById('fixHp').click((e)=>{
 			this.setCurrentHp(this.getElementById('titusHp').val());
+			this.updateHpValue();
 		});
 	}
 
@@ -174,6 +183,7 @@ io.github.shunshun94.HiyokoCross.ErotionManage = class extends com.hiyoko.compon
 
 io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS = {
 	UPDATE_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-UPDATE_EROTION_VALUE',
+	UPDATE_HP_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-UPDATE_HP_VALUE',
 	ADD_EROTION_VALUE: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-ADD_EROTION_VALUE',
 	RESURRECT_REQUEST: 'io-github-shunshun94-HiyokoCross-ErotionManage-EVENTS-RESURRECT_REQUEST'
 };
