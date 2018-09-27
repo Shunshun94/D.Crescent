@@ -8,7 +8,6 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		this.options = opts;
 		this.client = opts.client || new io.github.shunshun94.trpg.dummy.Room($(`#${this.id}-log`));
 		this.isExistInitTable = io.github.shunshun94.HiyokoCross.Application.NO_INIT_TABLE.includes(this.client.platform);
-		console.log(this.isExistInitTable);
 		this.sheet = sheet;
 		this.max = 0;
 		this.appendCharacter().then((sheets) => {
