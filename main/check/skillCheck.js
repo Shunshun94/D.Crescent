@@ -47,7 +47,7 @@ io.github.shunshun94.HiyokoCross.SkillCheck = class extends com.hiyoko.component
 				lv: 0, name: this.data.name
 			};
 			const check = new io.github.shunshun94.HiyokoCross.CheckDto({
-				dice: this.data.base, hit: skill.lv, name: skill.name
+				dice: skill.dice || this.data.base, hit: skill.lv, name: skill.name
 			});
 			this.fireEvent(check.getCheckEvent());
 			this.fireEvent(check.getSimplerCostEvent());
