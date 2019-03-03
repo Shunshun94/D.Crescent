@@ -7,6 +7,7 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		super($dom, opts);
 		this.options = opts;
 		this.client = opts.client || new io.github.shunshun94.trpg.dummy.Room($(`#${this.id}-log`));
+		this.isExistInitTable = io.github.shunshun94.HiyokoCross.Application.NO_INIT_TABLE.includes(this.client.platform);
 		this.sheet = sheet;
 		this.max = 0;
 		this.appendCharacter().then((sheets) => {
@@ -42,10 +43,12 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 					`${this.erotion.getCurrentEnroach()}+${event.cost}+1d1-1 | 侵蝕率上昇`;
 			this.sendChatAsyn({message: text}).then((result) => {
 				this.erotion.setCurrentEnroach(result);
-				this.client.updateCharacter({
-					targetName: this.sheet.name,
-					'侵蝕率': result
-				});
+				if(this.isExistInitTable) {
+					this.client.updateCharacter({
+						targetName: this.sheet.name,
+						'侵蝕率': result
+					});
+				}
 				((event.resolve) || (console.log))(result);
 			}, (event.reject) || (console.log));
 		}
@@ -74,14 +77,20 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 				return !(lois.titus || lois.type === 'Dロイス');
 			}).length;
 			com.hiyoko.util.updateLocalStorage(io.github.shunshun94.HiyokoCross.Lois.KEEP_STORE, this.sheet.id, loisList);
-			this.client.updateCharacter({
-						targetName: this.sheet.name,
-						'ロイス': loisCount
-					}).then((ok)=>{
-				this.erotion.updateLoisCount(loisCount)
-			}, (err)=>{
-				this.initiativeTableUpdateFailer(err);
-			});
+			if(this.isExistInitTable) {
+				this.client.updateCharacter({
+					targetName: this.sheet.name,
+					'ロイス': loisCount
+				}).then((ok)=>{
+					this.erotion.updateLoisCount(loisCount);
+				}, (err)=>{
+					this.initiativeTableUpdateFailer(err);
+				});
+			} else {
+				this.erotion.updateLoisCount(loisCount);
+			}
+			
+			
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.Lois.UPDATE_LOIS_STORAGE, (event) => {
 			this.updateLoisStorage(event);
@@ -111,34 +120,52 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 			this.updateCost(event);
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_EROTION_VALUE, (event) => {
-			this.erotion.setCurrentEnroach(event.value);
-			this.client.updateCharacter({
-				targetName: this.sheet.name,
-				'侵蝕率': event.value
-			}).then((dummy) => {
-				this.client.sendChat({
-					name: this.sheet.name,
-					color: this.sheet.color,
-					message: `侵蝕率修正： ${event.value}`
+			if(this.isExistInitTable) {
+				this.client.updateCharacter({
+					targetName: this.sheet.name,
+					'侵蝕率': event.value
+				}).then((dummy) => {
+					this.erotion.setCurrentEnroach(event.value);
+				}, (err) => {
+					this.initiativeTableUpdateFailer(err);
 				});
-			}, (err) => {
-				this.initiativeTableUpdateFailer(err);
-			});
+			} else {
+				this.erotion.setCurrentEnroach(event.value);
+			}
+		});
+		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.UPDATE_HP_VALUE, (event) => {
+			if(this.isExistInitTable) {
+				this.client.updateCharacter({
+					targetName: this.sheet.name,
+					'HP': event.value
+				}).then((dummy) => {
+					// no action
+				}, (err) => {
+					this.initiativeTableUpdateFailer(err);
+				});
+			}
 		});
 		this.$html.on(io.github.shunshun94.HiyokoCross.ErotionManage.EVENTS.RESURRECT_REQUEST, (event) => {
 			this.sendChatAsyn({
 				name: this.sheet.name,
 				message: `${this.erotion.getCurrentEnroach()}+1d10 | リザレクト`
 			}).then((result) => {
-				this.client.updateCharacter({
-					targetName: this.sheet.name,
-					'侵蝕率': result,
-					'HP': result - Number(this.erotion.getCurrentEnroach())
-				}).then((updateResult) => {
+				const hp = result - Number(this.erotion.getCurrentEnroach());
+				if(this.isExistInitTable) {
+					this.client.updateCharacter({
+						targetName: this.sheet.name,
+						'侵蝕率': result,
+						'HP': hp
+					}).then((updateResult) => {
+						this.erotion.setCurrentEnroach(result);
+						this.erotion.setCurrentHp(hp);
+					}, (failed) => {
+						this.initiativeTableUpdateFailer(failed);
+					});
+				} else {
 					this.erotion.setCurrentEnroach(result);
-				}, (failed) => {
-					this.initiativeTableUpdateFailer(failed);
-				});
+					this.erotion.setCurrentHp(hp);
+				}
 			});
 		});
 	}
@@ -252,7 +279,15 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		}
 		
 		this.$html.on(io.github.shunshun94.HiyokoCross.Application.EVENTS.TofEvent, (event) => {
-			this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
+			if(this.isExistInitTable || ((event.method !== 'updateCharacter') && (event.method !== 'addCharacter'))) {
+				if(event.method === 'sendChat') {
+					event.args[0].name = event.args[0].name || this.sheet.name;
+					event.args[0].color = event.args[0].color || this.sheet.color;
+				}
+				this.client[event.method].apply(this.client, event.args).done(event.resolve).fail(event.reject);
+			} else {
+				event.resolve({result: 'OK'});
+			}
 		});
 		this.$html.append(`<div id="${this.id}-characterNameSetter"></div>`);
 		const nameSetter = new io.github.shunshun94.HiyokoCross.Applications.CharacterNameSetter(this.getElementById('characterNameSetter'), this.options);
@@ -282,6 +317,8 @@ io.github.shunshun94.HiyokoCross.Application = class extends com.hiyoko.componen
 		alert(`イニシアティブ表の更新に失敗しました\n理由: ${err.result}`);
 	}
 };
+
+io.github.shunshun94.HiyokoCross.Application.NO_INIT_TABLE = ['DodontoF', 'tof', 'dummy'];
 
 io.github.shunshun94.HiyokoCross.Application.EVENTS = {
 	TofEvent: 'tofRoomRequest',
