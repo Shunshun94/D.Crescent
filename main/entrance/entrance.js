@@ -25,11 +25,9 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getSheetId()}&dicebot=${this.getElementById('dummy-bcdice-url').val()}`;
 	}
 	insertParams() {
-		console.log(this.params);
 		this.getElementById('dummy-bcdice-url').val(this.params.dicebot || '');
 		this.getElementById('discord-bcdice-url').val(this.params.dicebot || '');
 		this.getElementById('discord-url-token').val(this.params.token || '');
-		console.log(this.getElementById('discord-url-token').val())
 	}
 
 	bindEvents() {
