@@ -5,15 +5,16 @@ io.github.shunshun94.HiyokoCross = io.github.shunshun94.HiyokoCross || {};
 io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.ApplicationBase {
 	constructor($html) {
 		super($html);
+		this.params = com.hiyoko.util.getQueries();
 		this.buildDom();
 		this.buildComponents();
 		this.bindEvents();
+		this.insertParams();
 	}
-	
+
 	getSheetId() {
 		return this.getElementById('sheet-input').val().replace('=', '%EQUAL%');
 	}
-	
 	buildTofUrl(e) {
 		document.location = `./dcrescent.html?sheet=${this.getSheetId()}&url=${e.value.url}&room=${e.value.room.no}&pass=${e.value.password.password}`;
 	}
@@ -23,7 +24,14 @@ io.github.shunshun94.HiyokoCross.Entrance = class extends com.hiyoko.component.A
 	buildDummyUrl(e) {
 		document.location = `./dcrescent.html?system=DoubleCross&sheet=${this.getSheetId()}&dicebot=${this.getElementById('dummy-bcdice-url').val()}`;
 	}
-	
+	insertParams() {
+		console.log(this.params);
+		this.getElementById('dummy-bcdice-url').val(this.params.dicebot || '');
+		this.getElementById('discord-bcdice-url').val(this.params.dicebot || '');
+		this.getElementById('discord-url-token').val(this.params.token || '');
+		console.log(this.getElementById('discord-url-token').val())
+	}
+
 	bindEvents() {
 		this.getElementById('sheet-input').change((e) => {
 			if(this.getElementById('sheet-input').val()) {
