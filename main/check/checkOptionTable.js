@@ -23,7 +23,7 @@ io.github.shunshun94.HiyokoCross.CheckOptionTableBase = class extends com.hiyoko
 		});
 		this.items.forEach((item) => {
 			this.options.addMember();
-			this.options.setLine([false, item.name, 0, 0, 0, 0, 0, '']);
+			this.options.setLine([false, item.name, 0, 0, 0, 0, 0, item.notes]);
 		});
 		JSON.parse(localStorage.getItem('io-github-shunshun94-HiyokoCross-CheckOption') || '[]').forEach((data) => {
 			this.options.addMember();
@@ -155,5 +155,5 @@ io.github.shunshun94.HiyokoCross.CheckOptionTable.COLS = [
 	{title:'有効', type:'check'}, {title:'名称', type:'text'},
 	{title:'ダイス', type: 'number'}, {title:'達成値', type:'number'},
 	{title:'クリ値', type: 'number'}, {title:'攻撃力', type: 'number'},
-	 {title:'侵蝕率', type: 'text'},{title:'説明', type: 'text'}
+	{title:'侵蝕率', type: 'text'},{title:'説明', type: 'text'}
 ];
