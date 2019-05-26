@@ -144,7 +144,7 @@ io.github.shunshun94.HiyokoCross.Entrance.PLATFORMS = {
 	},
 	discord: {
 		label: 'Discord に接続する',
-		text: 'ブラウザおよびアプリで動作するゲーマー向けチャット・音声通話ツール Discord に接続します。あらかじめBot ユーザの作成と BCDice-API サーバを用意しておく必要があります'
+		text: 'ブラウザおよびアプリで動作するゲーマー向けチャット・音声通話ツール Discord に接続します。あらかじめ接続用 Token と BCDice-API サーバを用意しておく必要があります'
 	},
 	dummy: {
 		label: '動作確認する',
